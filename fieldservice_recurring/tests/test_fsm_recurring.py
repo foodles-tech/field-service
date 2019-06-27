@@ -1,5 +1,6 @@
 # Copyright 2019 Ecosoft Co., Ltd (http://ecosoft.co.th/)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html)
+
 from math import ceil
 from odoo import fields
 from odoo.tests.common import TransactionCase
@@ -12,6 +13,8 @@ class FSMRecurringCase(TransactionCase):
         self.Recurring = self.env['fsm.recurring']
         self.Frequency = self.env['fsm.frequency']
         self.FrequencySet = self.env['fsm.frequency.set']
+        self.RecurringTemplate = self.env['fsm.recurring.template']
+
         # create a Partner to be converted to FSM Location/Person
         self.test_loc_partner = self.env['res.partner'].\
             create({
@@ -148,3 +151,18 @@ class FSMRecurringCase(TransactionCase):
             mapped('scheduled_date_start')
         for d in all_dates:
             self.assertEqual(d.day, 31)
+
+    def _create_frequence_rule_set(self):
+        print('_create_frequence_rule_set()')
+        # Create frequence rule
+
+        # Create frequency rule set
+
+    def test_fsm_recurring(self):
+        """I create frequency rule, frequence rule set, recurring template
+        then create a recurring order and select recurring template.
+        When I click contirm I expect,
+        ...
+        """
+        frset = self._create_frequence_rule_set()
+        # self.Recurring._cron_scheduled_task()
