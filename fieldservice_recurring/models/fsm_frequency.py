@@ -95,6 +95,8 @@ class FSMFrequency(models.Model):
             the frequency period. For example, -1 if combined with a
             'Monthly' frequency, and a weekday of (MO, TU, WE, TH, FR),
             will result in the last work day of every month.""")
+    use_rrulestr = fields.Boolean(string='Use rrule string')
+    rrule_string = fields.Char()
 
     @api.constrains('set_pos')
     def _check_set_pos(self):
@@ -110,14 +112,17 @@ class FSMFrequency(models.Model):
 
     def _get_rrule(self, dtstart=None, until=None):
         self.ensure_one()
-        freq = FREQUENCIES[self.interval_type]
-        return rrule(freq, interval=self.interval,
-                     dtstart=dtstart, until=until,
-                     byweekday=self._byweekday(),
-                     bymonth=self._bymonth(),
-                     bymonthday=self._bymonthday(),
-                     bysetpos=self._bysetpos(),
-                     )
+        if self.use_rrulestr:
+            return rrule.rrulestr(self.rrule_string)
+        else:
+            freq = FREQUENCIES[self.interval_type]
+            return rrule(freq, interval=self.interval,
+                         dtstart=dtstart, until=until,
+                         byweekday=self._byweekday(),
+                         bymonth=self._bymonth(),
+                         bymonthday=self._bymonthday(),
+                         bysetpos=self._bysetpos(),
+                         )
 
     def _byweekday(self):
         """
