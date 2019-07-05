@@ -31,74 +31,85 @@
                             <field name="name" placeholder="Frequency Name"/>
                         </h1>
                     </div>
-                    <group>
+                    <div>
                         <group>
-                            <label for="interval"/>
-                            <div class="o_row">
-                                <field name="interval"/>
-                                <field name="interval_type"/>
-                            </div>
+                            <field name="use_rrulestr"/>
+                        </group>
+                        <div attrs="{'invisible': [('use_rrulestr', '=', False)]}" name="rrule_string">
+                            <group>
+                                <field name="rrule_string"/>
+                            </group>
+                        </div>
+                    </div>
+                    <div attrs="{'invisible': [('use_rrulestr', '=', True)]}" name="rrule_non_string">
+                        <group>
+                            <group>
+                                <label for="interval"/>
+                                <div class="o_row">
+                                    <field name="interval"/>
+                                    <field name="interval_type"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="is_exclusive"/>
+                            </group>
                         </group>
                         <group>
-                            <field name="is_exclusive"/>
+                            <div>
+                                <group>
+                                    <field name="use_byweekday"/>
+                                </group>
+                                <div attrs="{'invisible': [('use_byweekday', '=', False)]}" name="weekdays">
+                                    <group>
+                                        <field name="mo"/>
+                                        <field name="tu"/>
+                                        <field name="we"/>
+                                        <field name="th"/>
+                                        <field name="fr"/>
+                                        <field name="sa"/>
+                                        <field name="su"/>
+                                    </group>
+                                </div>
+                                <group>
+                                    <field name="use_bymonthday"/>
+                                </group>
+                                <div attrs="{'invisible': [('use_bymonthday', '=', False)]}" name="monthday">
+                                    <group>
+                                        <field name="month_day"/>
+                                    </group>
+                                </div>
+                                <group>
+                                    <field name="use_setpos"/>
+                                </group>
+                                <div attrs="{'invisible': [('use_setpos', '=', False)]}" name="setpos">
+                                    <group>
+                                        <field name="set_pos"/>
+                                    </group>
+                                </div>
+                            </div>
+                            <div>
+                                <group>
+                                    <field name="use_bymonth"/>
+                                </group>
+                                <div attrs="{'invisible': [('use_bymonth', '=', False)]}" name="months">
+                                    <group>
+                                        <field name="jan"/>
+                                        <field name="feb"/>
+                                        <field name="mar"/>
+                                        <field name="apr"/>
+                                        <field name="may"/>
+                                        <field name="jun"/>
+                                        <field name="jul"/>
+                                        <field name="aug"/>
+                                        <field name="sep"/>
+                                        <field name="oct"/>
+                                        <field name="nov"/>
+                                        <field name="dec"/>
+                                    </group>
+                                </div>
+                            </div>
                         </group>
-                    </group>
-                    <group>
-                        <div>
-                            <group>
-                                <field name="use_byweekday"/>
-                            </group>
-                            <div attrs="{'invisible': [('use_byweekday', '=', False)]}" name="weekdays">
-                                <group>
-                                    <field name="mo"/>
-                                    <field name="tu"/>
-                                    <field name="we"/>
-                                    <field name="th"/>
-                                    <field name="fr"/>
-                                    <field name="sa"/>
-                                    <field name="su"/>
-                                </group>
-                            </div>
-                            <group>
-                                <field name="use_bymonthday"/>
-                            </group>
-                            <div attrs="{'invisible': [('use_bymonthday', '=', False)]}" name="monthday">
-                                <group>
-                                    <field name="month_day"/>
-                                </group>
-                            </div>
-                            <group>
-                                <field name="use_setpos"/>
-                            </group>
-                            <div attrs="{'invisible': [('use_setpos', '=', False)]}" name="setpos">
-                                <group>
-                                    <field name="set_pos"/>
-                                </group>
-                            </div>
-                        </div>
-                        <div>
-                            <group>
-                                <field name="use_bymonth"/>
-                            </group>
-                            <div attrs="{'invisible': [('use_bymonth', '=', False)]}" name="months">
-                                <group>
-                                    <field name="jan"/>
-                                    <field name="feb"/>
-                                    <field name="mar"/>
-                                    <field name="apr"/>
-                                    <field name="may"/>
-                                    <field name="jun"/>
-                                    <field name="jul"/>
-                                    <field name="aug"/>
-                                    <field name="sep"/>
-                                    <field name="oct"/>
-                                    <field name="nov"/>
-                                    <field name="dec"/>
-                                </group>
-                            </div>
-                        </div>
-                        
-                    </group>
+                    </div>
                 </sheet>
             </form>
         </field>
