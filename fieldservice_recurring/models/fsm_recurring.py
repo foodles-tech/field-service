@@ -205,7 +205,7 @@ class FSMRecurringOrder(models.Model):
         """
         Executed by Cron task to put all 'pending' recurring orders into
         'close' stage if it is after their end date or the max orders have
-        been generated.  Next, the 'progress' recurring orders are put in
+        been generated.  Next, the 'progress' recurring orders are put inrequest_thru_str
         'pending' stage by first checking if the end date is within the next
         30 days and then checking if the max number of orders will be created
         within the next 30 days
