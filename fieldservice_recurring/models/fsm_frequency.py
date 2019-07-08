@@ -206,5 +206,5 @@ def rrule_to_string(rule):
     return '\n'.join(output)
 
 from dateutil.rrule import rrule
-rrule.__str__ = rrule_to_stringfields
+rrule.__str__ = rrule_to_string
 
