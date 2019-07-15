@@ -10,16 +10,22 @@
     'website': 'https://github.com/OCA/field-service',
     'depends': [
         'fieldservice',
+        'fieldservice_recurring',
         'sale',
     ],
     'data': [
         'views/fsm_location.xml'
+        'views/fsm_order.xml',
+        'views/fsm_recurring.xml',
+        'views/product.xml',
+        'views/sale_order.xml',
     ],
     'license': 'AGPL-3',
     'development_status': 'Beta',
     'maintainers': [
         'wolfhall',
         'max3903',
+        'brian10048'
     ],
     'installable': True,
 }
