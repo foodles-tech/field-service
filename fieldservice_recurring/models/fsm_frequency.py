@@ -3,7 +3,7 @@
 
 from dateutil.rrule import MO, TU, WE, TH, FR, SA, SU
 from dateutil.rrule import YEARLY, MONTHLY, WEEKLY, DAILY
-from dateutil.rrule import rrule
+from dateutil.rrule import rrule, rrulestr
 
 from odoo import fields, models, api, _
 from odoo.exceptions import UserError
@@ -113,7 +113,13 @@ class FSMFrequency(models.Model):
     def _get_rrule(self, dtstart=None, until=None):
         self.ensure_one()
         if self.use_rrulestr:
-            return rrule.rrulestr(self.rrule_string)
+            rule_string = "%s" % self.rrule_string
+            if until:
+                rule_string = "%s;UNTIL=%s" % (
+                    rule_string,
+                    until.strftime('%Y%m%dT%H%M%S')
+                )
+            return rrulestr(rule_string, dtstart=dtstart)
         else:
             freq = FREQUENCIES[self.interval_type]
             return rrule(freq, interval=self.interval,
