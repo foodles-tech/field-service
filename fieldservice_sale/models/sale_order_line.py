@@ -39,7 +39,7 @@ class SaleOrderLine(models.Model):
         super(SaleOrderLine, self)._compute_qty_delivered_method()
         for line in self:
             if not line.is_expense and line.product_id.type == 'service' \
-               and line.product_id.field_service_tracking == 'sale':
+               and line.product_id.field_service_tracking == 'line':
                 line.qty_delivered_method = 'field_service'
 
     @api.multi
@@ -67,7 +67,6 @@ class SaleOrderLine(models.Model):
     def _field_create_fsm_order_prepare_values(self):
         self.ensure_one()
         return {
-            'customer_id': self.order_id.partner_id.id,
             'location_id': self.order_id.fsm_location_id.id,
             'request_early': self.order_id.expected_date,
             'scheduled_date_start': self.order_id.expected_date,

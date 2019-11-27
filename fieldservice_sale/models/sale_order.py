@@ -135,7 +135,7 @@ class SaleOrder(models.Model):
                         inv = invoice.copy()
                         inv.write({'invoice_line_ids': [(6, 0, [])]})
                         lines_by_line[i].invoice_id = inv.id
-                    inv.fsm_order_id = lines_by_line[i].fsm_order_id.id
+                    inv.fsm_order_ids = lines_by_line[i].fsm_order_ids.id
                     result.append(inv.id)
 
             # check for invoice lines with product

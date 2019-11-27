@@ -11,6 +11,17 @@ class FSMOrder(models.Model):
     sale_id = fields.Many2one('sale.order')
     sale_line_id = fields.Many2one('sale.order.line')
 
+    invoice_line_id = fields.Many2one(
+        comodel_name="account.invoice.line",
+        readonly=True,
+        copy=False,
+    )
+
+    invoice_id = fields.Many2one(
+        related="invoice_line_id.invoice_id",
+        readonly=True,
+    )
+
     def action_view_sales(self):
         self.ensure_one()
         return {

@@ -6,5 +6,7 @@ from . import (
     product_template,
     sale_order,
     sale_order_line,
-    fsm_order
+    fsm_order,
+    account_invoice,
+    account_invoice_line,
 )
