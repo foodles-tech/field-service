@@ -18,14 +18,3 @@ class FSMOrder(models.Model):
         related="contract_line_id.contract_id",
         readonly=True,
     )
-
-    invoice_line_id = fields.Many2one(
-        comodel_name="account.invoice.line",
-        readonly=True,
-        copy=False,
-    )
-
-    invoice_id = fields.Many2one(
-        related="invoice_line_id.invoice_id",
-        readonly=True,
-    )

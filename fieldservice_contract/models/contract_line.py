@@ -108,7 +108,6 @@ class ContractLine(models.Model):
 
     def _fsm_create_fsm_common_prepare_values(self):
         return {
-            'customer_id': self.contract_id.partner_id.id,
             'location_id': self.contract_id.fsm_location_id.id,
             'description': self.name,
             'contract_line_id': self.id,
@@ -227,7 +226,7 @@ class ContractLine(models.Model):
         """
         for line in self:
             # create order
-            if line.product_id.field_service_tracking == 'order':
+            if line.product_id.field_service_tracking == 'line':
                 line._field_find_fsm_order()
             # create recurring order
             elif line.product_id.field_service_tracking == 'recurring':

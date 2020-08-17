@@ -16,9 +16,9 @@
         'fieldservice_sale',
         'fieldservice_recurring',
         'fieldservice_sale_recurring',
+        'fieldservice_account',
     ],
     'data': [
-        'views/account_invoice.xml',
         'views/contract.xml',
         'views/contract_line.xml',
         'views/fsm_recurring.xml',
