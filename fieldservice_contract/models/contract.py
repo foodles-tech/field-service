@@ -7,8 +7,8 @@ from odoo import api, fields, models
 class ContractContract(models.Model):
     _inherit = 'contract.contract'
 
-    fsm_location_id = fields.Many2one(
-        string='FSM Location',
+    default_fsm_location_id = fields.Many2one(
+        string='Default FSM Location',
         comodel_name='fsm.location',
         inverse_name='contract_ids',
         copy=True,

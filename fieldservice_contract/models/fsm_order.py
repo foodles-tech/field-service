@@ -18,3 +18,8 @@ class FSMOrder(models.Model):
         related="contract_line_id.contract_id",
         readonly=True,
     )
+
+    invoice_lines = fields.Many2many(
+        # we need to link an invoice line, not only an invoice
+        'account.invoice.line', 'fsm_order_line_invoice_rel',
+        'order_line_id', 'invoice_line_id', string='Invoice Lines', copy=False)

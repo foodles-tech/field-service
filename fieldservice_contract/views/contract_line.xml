@@ -10,6 +10,7 @@
                 <group name="fsm">
                     <field name="fsm_recurring_id"/>
                     <field name="fsm_direct_order_id"/>
+                    <field name="fsm_location_id" />
                 </group>
             </group>
         </field>

@@ -26,12 +26,18 @@ class ContractLine(models.Model):
         help="All FSM Orders linked to this contract line",
         # recurring and direct orders
     )
+    fsm_location_id = fields.Many2one(
+        'fsm.location', 'FSM Location',
+        related='fsm_recurring_id.location_id',
+        help="Field Service Location",
+    )
 
     @api.multi
-    def _prepare_invoice_line(self, invoice_id):
+    def _prepare_invoice_line(self, invoice_id=False, invoice_values=False):
         # add link fsm orders to invoice line
         res = super(ContractLine, self)._prepare_invoice_line(
-            invoice_id
+            invoice_id,
+            invoice_values,
         )
         dates = self._get_period_to_invoice(
             self.last_date_invoiced, self.recurring_next_date
@@ -73,7 +79,7 @@ class ContractLine(models.Model):
             ('scheduled_date_start', '>=', period_first_date),
             ('scheduled_date_start', '<=', period_last_date),
             ('contract_line_id', '=', self.id),
-            ('invoice_line_id', '=', False),
+            ('invoice_lines', '=', False), # plutôt verifier la quantite facturee?
         ]
         if invoiceable_stage_ids:
             dom.append(['stage_id', 'in', invoiceable_stage_ids.ids])
@@ -108,7 +114,7 @@ class ContractLine(models.Model):
 
     def _fsm_create_fsm_common_prepare_values(self):
         return {
-            'location_id': self.contract_id.fsm_location_id.id,
+            'location_id': self.contract_id.default_fsm_location_id.id,
             'description': self.name,
             'contract_line_id': self.id,
             'company_id': self.contract_id.company_id.id,
