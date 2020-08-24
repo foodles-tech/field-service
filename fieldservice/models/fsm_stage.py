@@ -49,7 +49,7 @@ class FSMStage(models.Model):
             ("worker", "Worker"),
         ],
         "Type",
-        required=True,
+        #required=True,
     )
     company_id = fields.Many2one(
         "res.company",
