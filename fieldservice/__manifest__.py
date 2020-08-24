@@ -14,7 +14,7 @@
         "base_geolocalize",
         "resource",
         "contacts",
-        "partner_fax",
+#        "partner_fax",
     ],
     "data": [
         "data/ir_sequence.xml",
