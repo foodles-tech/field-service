@@ -1,12 +1,11 @@
 # Copyright (C) 2019 - TODAY, mourad EL HADJ MIMOUNE, Akretion
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from dateutil.rrule import (
-    rrule,
-)
+from dateutil.rrule import rrule
 
-from odoo import api, fields, models, _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+
 from odoo.addons.fieldservice_recurring.models.fsm_frequency import FREQUENCIES
 
 WEEKDAYS_SELECT = [
@@ -37,8 +36,7 @@ class FSMFrequency(models.Model):
     use_rrulestr = fields.Boolean(string="Use rrule string")
     rrule_string = fields.Char()
     # simlpe edit helper with planned_hour precision
-    interval_frequency = fields.Selection(
-        INTERVAl_FREQUENCIES)
+    interval_frequency = fields.Selection(INTERVAl_FREQUENCIES)
     use_planned_hour = fields.Boolean()
     week_day = fields.Selection(WEEKDAYS_SELECT)
     planned_hour = fields.Float("Planned Hours")
@@ -65,8 +63,7 @@ class FSMFrequency(models.Model):
     @api.model
     def create(self, vals):
         if not vals.get("name"):
-            hours, minutes = self._split_time_to_hour_min(
-                vals.get("planned_hour"))
+            hours, minutes = self._split_time_to_hour_min(vals.get("planned_hour"))
             wd = _(dict(WEEKDAYS_SELECT)[vals.get("week_day")])
             name = wd + "_" + str(hours) + "_" + str(minutes)
             vals["name"] = name
@@ -104,8 +101,7 @@ class FSMFrequency(models.Model):
 
     def _byhours(self):
         self.ensure_one()
-        if not self.use_planned_hour\
-                or not self.week_day or self.week_day == "none":
+        if not self.use_planned_hour or not self.week_day or self.week_day == "none":
             return None, None
         hours, minutes = self._split_time_to_hour_min(self.planned_hour)
         return hours, minutes
@@ -135,24 +131,23 @@ class FSMFrequency(models.Model):
             # we add anly defined args to kwargs
             kwargs = {}
             if self.interval:
-                kwargs['interval'] = self.interval
+                kwargs["interval"] = self.interval
             if dtstart:
-                kwargs['dtstart'] = dtstart
+                kwargs["dtstart"] = dtstart
             if until:
-                kwargs['until'] = until
+                kwargs["until"] = until
             if self._byweekday():
-                kwargs['byweekday'] = self._byweekday()
+                kwargs["byweekday"] = self._byweekday()
             if self._bymonth():
-                kwargs['bymonth'] = self._bymonth()
+                kwargs["bymonth"] = self._bymonth()
             if self._bymonthday():
-                kwargs['bymonthday'] = self._bymonthday()
+                kwargs["bymonthday"] = self._bymonthday()
             if self._bysetpos():
-                kwargs['bysetpos'] = self._bysetpos()
+                kwargs["bysetpos"] = self._bysetpos()
             if hours or hours == 0:
-                kwargs['byhour'] = hours
+                kwargs["byhour"] = hours
             if minutes or minutes == 0:
-                kwargs['byminute'] = minutes
-                kwargs['bysecond'] = 0
+                kwargs["byminute"] = minutes
+                kwargs["bysecond"] = 0
             return rrule(freq, **kwargs)
-        return super(FSMFrequency, self)._get_rrule(
-            dtstart=dtstart, until=until)
+        return super(FSMFrequency, self)._get_rrule(dtstart=dtstart, until=until)
