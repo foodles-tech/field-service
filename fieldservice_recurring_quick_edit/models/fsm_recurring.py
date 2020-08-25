@@ -28,7 +28,8 @@ class FSMRecurringOrder(models.Model):
         default="use_predefined",
     )
     fsm_frequency_ids = fields.Many2many(
-        related="fsm_frequency_set_qedit_id.fsm_frequency_ids",
+        "fsm.frequency",
+        # related="fsm_frequency_set_qedit_id.fsm_frequency_ids",
         readonly=False,
         string="Frequency Rules",
     )
@@ -39,7 +40,6 @@ class FSMRecurringOrder(models.Model):
             if fsmr.frequency_type == "edit_inplace":
                 fsmr.fsm_frequency_set_id = False
 
-    @api.model_cr
     def init(self):
         # set all existing unset fsm_frequency_set_qedit_id fields to ``true``
         self._cr.execute(
@@ -60,7 +60,6 @@ class FSMRecurringOrder(models.Model):
             res.fsm_frequency_set_id = res.fsm_frequency_set_qedit_id
         return res
 
-    @api.multi
     def write(self, vals):
         res = super(FSMRecurringOrder, self).write(vals)
         r_edited = self.filtered(
@@ -90,7 +89,6 @@ class FSMRecurringOrder(models.Model):
         action["key2"] = "client_action_multi"
         return action
 
-    @api.multi
     def generate_orders(self):
         """
         Executed from form view (call private method) _generate_orders
