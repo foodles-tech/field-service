@@ -7,7 +7,7 @@
     "category": "Field Service",
     "author": "Open Source Integrators, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/field-service",
-    "depends": ["fieldservice", "sale_management", "fieldservice_account"],
+    "depends": ["base_territory", "sale_management", "fieldservice_account"],
     "data": [
         "security/ir.model.access.csv",
         "views/fsm_branch.xml",
@@ -15,7 +15,7 @@
         "views/fsm_order.xml",
         "views/product_template.xml",
         "views/sale_order.xml",
-        "views/res_config_settings.xml",
+        # "views/res_config_settings.xml",
     ],
     "license": "AGPL-3",
     "development_status": "Beta",
