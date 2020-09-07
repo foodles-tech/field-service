@@ -4,14 +4,14 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
-            <xpath expr="//form/field[@name='product_uom_qty']" position="before">
-                <field name="fsm_recurring_id" context="{'default_is_used_in_sale_line': True}" />
+            <xpath expr="//form//field[@name='product_uom_readonly']" position="after">
+                <field name="fsm_frequency_id" context="{'default_is_used_in_sale_line': True}" />
             </xpath>
             <xpath
                 expr="//field[@name='order_line']//tree/field[@name='product_uom_qty']"
                 position="after"
             >
-                <field name="fsm_recurring_id" context="{'default_is_used_in_sale_line': True}" />
+                <field name="fsm_frequency_id" context="{'default_is_used_in_sale_line': True}" />
             </xpath>
         </field>
     </record>
