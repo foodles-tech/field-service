@@ -50,8 +50,10 @@ class SaleOrder(models.Model):
         ]
         if self.partner_id.fsm_location:
             domain = [("partner_id", "=", self.partner_id.id)]
-        location_ids = self.env["fsm.location"].search(domain)
-        self.fsm_location_id = location_ids and location_ids[0] or False
+        location_id = self.env["fsm.location"].search(domain)[:1]
+        if location_id:
+            self.fsm_location_id = location_id
+#        self.fsm_location_id = location_ids and location_ids[0] or False
 
     def _field_create_fsm_order_prepare_values(self):
         self.ensure_one()
