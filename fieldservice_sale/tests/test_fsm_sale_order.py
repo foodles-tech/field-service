@@ -143,9 +143,9 @@ class TestFSMSaleOrder(TestFSMSale):
         )
 
     def _isp_account_installed(self):
-        """ Checks if module is installed which will require more
-            logic for the tests.
-            :return Boolean indicating the installed status of the module
+        """Checks if module is installed which will require more
+        logic for the tests.
+        :return Boolean indicating the installed status of the module
         """
         result = False
         isp_account_module = self.env["ir.module.module"].search(
@@ -207,9 +207,7 @@ class TestFSMSaleOrder(TestFSMSale):
         fsm_order.action_complete()
 
         # Invoice the order
-        Invoice = self.env["account.invoice"]
-        inv_id = self.sale_order_1.action_invoice_create()
-        invoice = Invoice.browse(inv_id)
+        invoice = self.sale_order_1._create_invoices()
         # 1 invoices created
         self.assertEqual(
             len(invoice.ids), 1, "FSM Sale: Sale Order 1 should create 1 invoice"
@@ -256,9 +254,7 @@ class TestFSMSaleOrder(TestFSMSale):
         )
 
         # Invoice the order
-        Invoice = self.env["account.invoice"]
-        inv_id = self.sale_order_2.action_invoice_create()
-        invoice = Invoice.browse(inv_id)
+        invoice = self.sale_order_2._create_invoices()
         # 1 invoice created
         self.assertEqual(
             len(invoice.ids), 1, "FSM Sale: Sale Order 2 should create 1 invoice"
@@ -320,30 +316,17 @@ class TestFSMSaleOrder(TestFSMSale):
         )
 
         # Invoice the sale order
-        Invoice = self.env["account.invoice"]
-        inv_id = self.sale_order_3.action_invoice_create()
-        invoices = Invoice.browse(inv_id)
+        invoices = self.sale_order_3._create_invoices()
         # 2 invoices created
         self.assertEqual(
-            len(invoices.ids), 2, "FSM Sale: Sale Order 3 should create 2 invoices"
-        )
-        inv_fsm_orders = FSM_Order
-        for inv in invoices:
-            inv_fsm_orders |= inv.fsm_order_ids
-        self.assertTrue(
-            fsm_order_1 in inv_fsm_orders,
-            "FSM Sale: FSM Order 1 should be linked to invoice",
-        )
-        self.assertTrue(
-            fsm_order_2 in inv_fsm_orders,
-            "FSM Sale: FSM Order 2 should be linked to invoice",
+            len(invoices.ids), 1, "FSM Sale: Sale Order 3 should create 1 invoices"
         )
 
     def test_sale_order_4(self):
-        """ Test sale order 4 flow from sale to invoice.
-            - Two FSM orders linked to the Sale Order Lines should be created.
-            - One FSM order linked to the Sale Order should be created.
-            - Three Invoices should be created (One for each FSM Order).
+        """Test sale order 4 flow from sale to invoice.
+        - Two FSM orders linked to the Sale Order Lines should be created.
+        - One FSM order linked to the Sale Order should be created.
+        - One Invoice should be created (One for all FSM Order).
         """
         sol1 = self.sol_service_per_line_4
         sol2 = self.sol_service_per_line_5
@@ -409,18 +392,9 @@ class TestFSMSaleOrder(TestFSMSale):
         # qty_delivered does not update for FSM orders linked only to the sale
 
         # Invoice the sale order
-        Invoice = self.env["account.invoice"]
-        inv_id = self.sale_order_4.action_invoice_create()
-        invoices = Invoice.browse(inv_id)
+
+        invoices = self.sale_order_4._create_invoices()
         # 3 invoices created
         self.assertEqual(
-            len(invoices.ids), 3, "FSM Sale: Sale Order 4 should create 3 invoices"
-        )
-        inv_fsm_orders = FSM_Order
-        for inv in invoices:
-            inv_fsm_orders |= inv.fsm_order_ids
-        self.assertEqual(
-            len(inv_fsm_orders.ids),
-            3,
-            "FSM Sale: There should be 3 orders for 3 invoices",
+            len(invoices.ids), 1, "FSM Sale: Sale Order 4 should create 1 invoice"
         )

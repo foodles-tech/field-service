@@ -6,6 +6,7 @@ from . import (
     fsm_location,
     fsm_order,
     product_template,
+    res_branch,
     sale_order_line,
     sale_order,
 )

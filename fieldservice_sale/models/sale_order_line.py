@@ -1,5 +1,9 @@
 # Copyright (C) 2019 Brian McMaster
 # Copyright (C) 2019 Open Source Integrators
+<<<<<<< HEAD
+=======
+# Copyright (C) 2020 raphael.reverdy@akretion.com
+>>>>>>> 13.0-mig-fsm-sale-fix-invoicing
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import _, api, fields, models
 
@@ -29,7 +33,14 @@ class SaleOrderLine(models.Model):
     def _compute_qty_delivered_method(self):
         super(SaleOrderLine, self)._compute_qty_delivered_method()
         for line in self:
+<<<<<<< HEAD
             if not line.is_expense and line.product_id.field_service_tracking == "line":
+=======
+            if not line.is_expense and line.product_id.field_service_tracking in (
+                "sale",
+                "line",
+            ):
+>>>>>>> 13.0-mig-fsm-sale-fix-invoicing
                 line.qty_delivered_method = "field_service"
 
     @api.depends("fsm_order_id.stage_id")
@@ -56,7 +67,10 @@ class SaleOrderLine(models.Model):
         self.ensure_one()
         categories = self.product_id.fsm_order_template_id.category_ids
         return {
+<<<<<<< HEAD
             "customer_id": self.order_id.partner_id.id,
+=======
+>>>>>>> 13.0-mig-fsm-sale-fix-invoicing
             "location_id": self.order_id.fsm_location_id.id,
             "location_directions": self.order_id.fsm_location_id.direction,
             "request_early": self.order_id.expected_date,
@@ -140,7 +154,14 @@ class SaleOrderLine(models.Model):
             if rec.product_id.field_service_tracking == "line":
                 rec._field_find_fsm_order()
 
+<<<<<<< HEAD
     def _prepare_invoice_line(self, **optional_values):
         res = super()._prepare_invoice_line(optional_values)
         res.update({"fsm_order_id": self.fsm_order_id.id})
+=======
+    def _prepare_invoice_line(self):
+        res = super()._prepare_invoice_line()
+        # by default: don't group fsm_orders on account.move.line
+        res.update({"fsm_order_ids": [(6, 0, [self.fsm_order_id.id])]})
+>>>>>>> 13.0-mig-fsm-sale-fix-invoicing
         return res

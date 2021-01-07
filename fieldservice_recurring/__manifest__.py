@@ -4,13 +4,13 @@
 {
     "name": "Field Service Recurring Work Orders",
     "summary": "Manage recurring Field Service orders",
-    "version": "13.0.1.0.0",
+    "version": "13.0.1.0.1",
     "category": "Field Service",
     "author": "Brian McMaster, "
     "Open Source Integrators, "
     "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/field-service",
-    "depends": ["fieldservice",],
+    "depends": ["fieldservice"],
     "data": [
         "data/ir_sequence.xml",
         "security/res_groups.xml",
@@ -25,5 +25,5 @@
     ],
     "license": "AGPL-3",
     "development_status": "Beta",
-    "maintainers": ["wolfhall", "max3903", "brian10048",],
+    "maintainers": ["wolfhall", "max3903", "brian10048"],
 }
