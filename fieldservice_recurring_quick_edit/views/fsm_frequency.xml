@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+    <record id="fsm_frequency_set_form_view" model="ir.ui.view">
+        <field name="model">fsm.frequency.set</field>
+        <field name="inherit_id" ref="fieldservice_recurring.fsm_frequency_set_form_view" />
+        <field name="arch" type="xml">
+            <field name="buffer_late" position="after">
+                <field name="is_quick_edit" />
+                <field name="quick_edit_fsm_recurring_id" />
+            </field>
+        </field>
+    </record>
+
     <record id="fsm_frequency_form_view" model="ir.ui.view">
         <field name="model">fsm.frequency</field>
         <field name="inherit_id" ref="fieldservice_recurring.fsm_frequency_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//div[@name='weekdays']" position="before">
+                <field name="interval_frequency" />
+                <field name="is_quick_edit" />
                 <div
                     attrs="{'invisible': [('use_byweekday', '=', False)]}"
                     name="weekdays"
@@ -18,8 +31,6 @@
                     name="hours"
                 >
                     <group>
-                        <field name="interval_frequency" />
-                        <field name="week_day" />
                         <field name="planned_hour" widget="float_time" />
                     </group>
                 </div>

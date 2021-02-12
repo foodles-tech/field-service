@@ -22,6 +22,12 @@
                     string="Generate Orders"
                     type="object"
                 />
+                <button 
+                    id="generate_5w"
+                    name="generate_5w"
+                    string="Generate 5w FSM"
+                    type="object"
+                />
             </button>
             <field name="fsm_frequency_set_id" position="before">
                 <field name="frequency_type" />
@@ -40,21 +46,18 @@
                         attrs="{'invisible': [('frequency_type', '=', 'use_predefined')]}"
                         name="weekdays"
                     >
-                        <field name="fsm_frequency_ids" widget="one2many_list">
+                        <field name="fsm_frequency_set_qedit_id" readonly="True" />
+                        <field name="fsm_frequency_qedit_ids"
+                            widget="section_and_note_one2many"
+                            mode="tree,form"
+                            context="{'default_fsm_recurring_id': active_id}" >
                             <tree editable="bottom">
                                 <field name="interval_frequency" />
-                                <field name="week_day" />
+                                <field name="week_day"/>
                                 <field name="planned_hour" widget="float_time" />
                                 <field name="interval_type" invisible="1" />
                                 <field name="use_planned_hour" invisible="1" />
                                 <field name="use_byweekday" invisible="1" />
-                                <field name="mo" invisible="1" />
-                                <field name="tu" invisible="1" />
-                                <field name="we" invisible="1" />
-                                <field name="th" invisible="1" />
-                                <field name="fr" invisible="1" />
-                                <field name="sa" invisible="1" />
-                                <field name="su" invisible="1" />
                             </tree>
                         </field>
                     </div>
