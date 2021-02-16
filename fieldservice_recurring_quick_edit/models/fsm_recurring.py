@@ -66,6 +66,11 @@ class FSMRecurringOrder(models.Model):
         return self._generate_orders()
 
     def generate_5w(self):
+        if self.start_date:
+            planned_hour = self.start_date.hour + self.start_date.minute / 60
+        else:
+            planned_hour = False
+
         base = {
             "name": "5w",
             "interval_type": "weekly",
@@ -73,6 +78,7 @@ class FSMRecurringOrder(models.Model):
             "use_planned_hour": True,
             "interval_frequency": "6",  # each
             "is_quick_edit": True,
+            "planned_hour": planned_hour,
         }
 
         days = [

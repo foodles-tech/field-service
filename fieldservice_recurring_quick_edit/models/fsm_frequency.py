@@ -56,12 +56,13 @@ class FSMFrequency(models.Model):
 
     @api.constrains("week_day", "planned_hour")
     def _check_planned_hour(self):
-        if not self.week_day:
-            raise UserError(_("Week day must be set"))
-        if self.use_planned_hour:
-            hours, minutes = self._byhours()
-            if not 0 <= hours <= 23:
-                raise UserError(_("Planned hours must be between 0 and 23"))
+        for rec in self:
+            if not rec.week_day:
+                raise UserError(_("Week day must be set"))
+            if rec.use_planned_hour:
+                hours, minutes = rec._byhours()
+                if not 0 <= hours <= 23:
+                    raise UserError(_("Planned hours must be between 0 and 23"))
 
     def _get_rrule(self, dtstart=None, until=None):
         self.ensure_one()
