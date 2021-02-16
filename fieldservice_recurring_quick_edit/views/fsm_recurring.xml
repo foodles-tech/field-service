@@ -50,8 +50,9 @@
                         <field name="fsm_frequency_qedit_ids"
                             widget="section_and_note_one2many"
                             mode="tree,form"
-                            context="{'default_fsm_recurring_id': active_id}" >
-                            <tree editable="bottom">
+                            context="{'default_fsm_recurring_id': active_id}" 
+                            create="false">
+                            <tree create="false">
                                 <field name="interval_frequency" />
                                 <field name="week_day"/>
                                 <field name="planned_hour" widget="float_time" />
@@ -59,6 +60,21 @@
                                 <field name="use_planned_hour" invisible="1" />
                                 <field name="use_byweekday" invisible="1" />
                             </tree>
+                            <form create="false">
+                                <group>
+                                <group>
+                                    <field name="interval_frequency" />
+                                    <field name="mo" />
+                                    <field name="tu" />
+                                    <field name="we" />
+                                    <field name="th" />
+                                    <field name="fr" />
+                                    <field name="sa" />
+                                    <field name="su" />
+                                    <field name="planned_hour" widget="float_time" />
+                                </group>
+                                </group>
+                            </form>
                         </field>
                     </div>
                 </group>

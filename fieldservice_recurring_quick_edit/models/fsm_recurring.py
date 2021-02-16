@@ -7,11 +7,7 @@ from odoo import api, fields, models
 
 class FSMRecurringOrder(models.Model):
     _inherit = "fsm.recurring"
-    #_inherits = {"fsm.frequency.set": "fsm_frequency_set_qedit_id"}
 
-    #name = fields.Char(
-    #    related="fsm_frequency_set_qedit_id.name", inherited=True, readonly=False
-    #)
     fsm_frequency_set_id = fields.Many2one(
         required=False)
     fsm_frequency_set_qedit_id = fields.Many2one(
@@ -29,37 +25,19 @@ class FSMRecurringOrder(models.Model):
     )
     fsm_frequency_qedit_ids = fields.Many2many(
         "fsm.frequency",
-    #     related="fsm_frequency_set_qedit_id.fsm_frequency_ids",
- #       readonly=True,
         compute="_calc_fsm_frequency_qedit_ids",
-        inverse="_inv_fsm_frequency_qedit_ids",
+        inverse="_inverse_fsm_frequency_qedit_ids",
         string="Frequency Rules",
     )
 
-    def _inv_fsm_frequency_qedit_ids(self):
-        # TODO: allow to edit
-        pass
+    def _inverse_fsm_frequency_qedit_ids(self):
+        for rec in self:
+            rec.fsm_frequency_set_qedit_id.fsm_frequency_ids = rec.fsm_frequency_qedit_ids
     
     @api.depends('fsm_frequency_set_qedit_id.fsm_frequency_ids')
     def _calc_fsm_frequency_qedit_ids(self):
         for rec in self:
             rec.fsm_frequency_qedit_ids = rec.fsm_frequency_set_qedit_id.fsm_frequency_ids
-
-
-    # def init(self):
-    # TODO move this to migration script ?
-    #     # set all existing unset fsm_frequency_set_qedit_id fields to ``true``
-    #     self._cr.execute(
-    #         "UPDATE fsm_recurring"
-    #         " SET fsm_frequency_set_qedit_id = fsm_frequency_set_id"
-    #         " WHERE fsm_frequency_set_qedit_id IS NULL"
-    #     )
-    #     self._cr.execute(
-    #         "UPDATE fsm_recurring"
-    #         " SET frequency_type = 'use_predefined'"
-    #         " WHERE frequency_type IS NULL"
-    #     )
-
 
     def action_view_fms_order(self):
         # TODO: move this in parent
