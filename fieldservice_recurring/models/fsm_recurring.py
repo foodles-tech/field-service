@@ -47,7 +47,8 @@ class FSMRecurringOrder(models.Model):
     )
     description = fields.Text(string="Description")
     fsm_frequency_set_id = fields.Many2one(
-        "fsm.frequency.set", "Frequency Set", required=True
+        "fsm.frequency.set",
+        "Frequency Set",
     )
     start_date = fields.Datetime(string="Start Date")
     end_date = fields.Datetime(
@@ -143,7 +144,7 @@ class FSMRecurringOrder(models.Model):
     def _get_rruleset(self):
         self.ensure_one()
         ruleset = rruleset()
-        if self.state != "progress":
+        if self.state != "progress" or not self.fsm_frequency_set_id:
             return ruleset
         # set next_date which is used as the rrule 'dtstart' parameter
         next_date = self.start_date
