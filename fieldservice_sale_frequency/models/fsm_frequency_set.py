@@ -9,3 +9,5 @@ class FSMFrequencySet(models.Model):
     _inherit = "fsm.frequency.set"
 
     is_used_in_sale_line = fields.Boolean()
+    # todo: rename it like
+    # is_abstract

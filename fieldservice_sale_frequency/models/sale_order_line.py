@@ -8,7 +8,7 @@ from odoo import _, fields, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    fsm_frequency_id = fields.Many2one(
+    fsm_frequency_set_id = fields.Many2one(
         "fsm.frequency.set",
         "Frequency SET",
         index=True,
