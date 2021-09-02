@@ -1,13 +1,13 @@
-# Copyright 2019 Akretion <raphael.reverdy@akretion.com>
+# Copyright 2021 Akretion <raphael.reverdy@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models
+from odoo import models, fields
 
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    scheduled_duration = field.Float(
+    scheduled_duration = fields.Float(
         compute="_compute_duration",
         readonly=True
     )
@@ -27,21 +27,23 @@ class SaleOrderLine(models.Model):
         self.ensure_one()
         vals = super()._field_create_fsm_order_prepare_values()
         duration = self.scheduled_duration
+        import pdb
+        pdb.set_trace()
         if duration:
             vals["scheduled_duration"] = duration
         return vals
 
     def _compute_duration(self):
-        uom_hour = self.env.ref('product_uom_hour')
+        uom_hour = self.env.ref('uom.product_uom_hour')
         _convert_duration = self.env['sale.order.line']._convert_duration
         for rec in self:
             from_uom = rec.secondary_uom_id.uom_id
             quantity = rec.secondary_uom_qty
-            rec = _convert_duration(uom_hour, quantity, uom_hour)
+            rec.scheduled_duration = _convert_duration(uom_hour, quantity, uom_hour)
 
-    def _convert_duration(self, from_uom, quantiy, uom_hour)
+    def _convert_duration(self, from_uom, quantity, uom_hour):
             uom_categ_wtime = uom_hour.category_id
-            if from_uom == uom_categ_wtime:
+            if from_uom.category_id == uom_categ_wtime:
                 return from_uom._compute_quantity(quantity, to_unit=uom_hour)
             else:
                 return False
