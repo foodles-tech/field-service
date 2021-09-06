@@ -244,7 +244,7 @@ class ContractLine(models.Model):
         """
         for line in self:
             # create order
-            if line.product_id.field_service_tracking == "order":
+            if line.product_id.field_service_tracking == "line":
                 line._field_find_fsm_order()
             # create recurring order
             elif line.product_id.field_service_tracking == "recurring":
