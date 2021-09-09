@@ -8,10 +8,7 @@ from odoo import fields, models
 class ContractLine(models.Model):
     _inherit = "contract.line"
 
-    scheduled_duration = fields.Float(
-        compute="_compute_duration",
-        readonly=True
-    )
+    scheduled_duration = fields.Float(compute="_compute_duration", readonly=True)
 
     def update_fsm(self, vals):
         to_apply = {}
@@ -31,11 +28,10 @@ class ContractLine(models.Model):
             vals["scheduled_duration"] = duration
         return vals
 
-
     def _compute_duration(self):
-        uom_hour = self.env.ref('uom.product_uom_hour')
-        _convert_duration = self.env['sale.order.line']._convert_duration
+        uom_hour = self.env.ref("uom.product_uom_hour")
+        _convert_duration = self.env["sale.order.line"]._convert_duration
         for rec in self:
             from_uom = rec.secondary_uom_id.uom_id
             quantity = rec.secondary_uom_qty
-            rec.scheduled_duration = _convert_duration(uom_hour, quantity, uom_hour)
+            rec.scheduled_duration = _convert_duration(from_uom, quantity, uom_hour)
