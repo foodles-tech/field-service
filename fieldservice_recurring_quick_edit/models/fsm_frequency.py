@@ -18,15 +18,85 @@ INTERVAl_FREQUENCIES = [
     ("6", "Each"),
 ]
 
+
 class FSMFrequency(models.Model):
     _inherit = "fsm.frequency"
 
+    fsm_recurring_id = fields.Many2one("fsm.recurring", "Recurring order")
     # simple edit helper with planned_hour precision
     interval_frequency = fields.Selection(INTERVAl_FREQUENCIES)
     use_planned_hour = fields.Boolean()
     planned_hour = fields.Float("Planned Hours")
-    is_quick_edit = fields.Boolean(default=False)
+    is_quick_editable = fields.Boolean(
+        compute="_compute_is_quick_editable", default=False, store=True
+    )
+    day_quick_edit = fields.Selection(
+        string="Day",
+        selection=[
+            ("mo", "Monday"),
+            ("tu", "Tuesday"),
+            ("we", "Wednesday"),
+            ("th", "Thuesday"),
+            ("fr", "Friday"),
+            ("sa", "Saturday"),
+            ("su", "Sunday"),
+        ],
+        compute="_compute_day_quick_edit",
+        inverse="_inverse_day_quick_edit",
+        default="mo",
+    )
     week_day = fields.Char(compute="_calc_week_day")
+    #    interval_type = fields.Selection(default="weekly")
+
+    def name_get(self):
+        result = []
+        for freq in self.sudo():
+            name = freq.name
+            if freq.fsm_recurring_id:
+                name = "{} - {}".format(freq.fsm_recurring_id.name, freq.name)
+            result.append((freq.id, name))
+        return result
+
+    def _inverse_day_quick_edit(self):
+        for rec in self:
+            rec.onchange_day_quick_edit()
+
+    @api.depends("is_quick_editable", "mo", "tu", "we", "th", "fr", "sa", "su")
+    def _compute_day_quick_edit(self):
+        for rec in self:
+            if rec.is_quick_editable:
+                weekdays = ["mo", "tu", "we", "th", "fr", "sa", "su"]
+                day_value = False
+                for field in weekdays:
+                    if rec[field]:
+                        day_value = field
+                rec.day_quick_edit = day_value
+
+    def _compute_is_quick_editable(self):
+        for rec in self:
+            rec.is_quick_editable = (
+                rec.interval_type == "weekly" and len(rec._byweekday()) == 1
+            )
+
+    @api.onchange("day_quick_edit")
+    def onchange_day_quick_edit(self):
+        if not self.day_quick_edit:
+            self.name = ""
+        days = {
+            "mo": "Monday",
+            "tu": "Tuesday",
+            "we": "Wednesday",
+            "th": "Thuesday",
+            "fr": "Friday",
+            "sa": "Saturday",
+            "su": "Sunday",
+        }
+        weekdays = ["mo", "tu", "we", "th", "fr", "sa", "su"]
+        for field in weekdays:
+            self[field] = False
+        self[self.day_quick_edit] = True
+        self.name = days[self.day_quick_edit]
+        self.use_byweekday = True
 
     def _calc_week_day(self):
         for rec in self:
@@ -66,7 +136,7 @@ class FSMFrequency(models.Model):
 
     def _get_rrule(self, dtstart=None, until=None):
         self.ensure_one()
-        if self.use_planned_hour:
+        if self.planned_hour:
             # TODO move use_planned_hour to parent module
             hours, minutes = self._byhours()
             freq = FREQUENCIES[self.interval_type]
