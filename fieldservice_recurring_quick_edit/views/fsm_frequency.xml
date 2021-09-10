@@ -9,7 +9,14 @@
         <field name="arch" type="xml">
             <field name="buffer_late" position="after">
                 <field name="is_quick_edit" />
-                <field name="fsm_recurring_id" />
+                <field name="fsm_recurring_id" readonly="True" />
+            </field>
+            <field name="fsm_frequency_ids" position="attributes">
+                <attribute name="attrs">
+                    {'readonly': [('is_quick_edit', '=', True)]}</attribute>
+                <attribute name="domain">[('fsm_recurring_id', '=', False)]</attribute>
+                <!-- frequency defined from recurring order must but managed from
+                the recurring order -->
             </field>
         </field>
     </record>

@@ -18,7 +18,7 @@ class FSMRecurringOrder(models.Model):
         index=True,
         copy=True,
         help="Frequency of the service",
-        domain=[("is_used_in_sale_line", "=", True)],
+        domain=[("is_abstract", "=", True)],
     )
     edit_type = fields.Selection(
         [("quick_edit", "Quick edit"), ("advanced", "Advanced edit"),],
@@ -27,8 +27,8 @@ class FSMRecurringOrder(models.Model):
     fsm_frequency_ids = fields.One2many(
         "fsm.frequency",
         "fsm_recurring_id",
-        compute="_calc_fsm_frequency_qedit_ids",
-        inverse="_inverse_fsm_frequency_qedit_ids",
+        compute="_calc_fsm_frequency_ids",
+        inverse="_inverse_fsm_frequency_ids",
         string="Frequency Rules",
     )
 
@@ -41,14 +41,14 @@ class FSMRecurringOrder(models.Model):
             frequencys |= freq.copy()
         self.fsm_frequency_ids = frequencys
 
-    def _inverse_fsm_frequency_qedit_ids(self):
+    def _inverse_fsm_frequency_ids(self):
         for rec in self:
             rec.fsm_frequency_set_id.fsm_frequency_ids = rec.fsm_frequency_ids
 
     @api.depends("fsm_frequency_set_id.fsm_frequency_ids")
     def _calc_fsm_frequency_ids(self):
         for rec in self:
-            rec.fsm_frequency_ids = rec.fsm_frequency_set_qedit_id.fsm_frequency_ids
+            rec.fsm_frequency_ids = rec.fsm_frequency_set_id.fsm_frequency_ids
 
     def action_view_fms_order(self):
         # TODO: move this in parent
@@ -79,10 +79,9 @@ class FSMRecurringOrder(models.Model):
     @api.model
     def create(self, values):
         recurring = super().create(values)
-
         if not recurring.fsm_frequency_set_id:
-            recurring.fsm_frequency_set_qedit_id = recurring.fsm_frequency_set_qedit_id.create(
-                {"name": self.name, "is_quick_edit": True,}
+            recurring.fsm_frequency_set_id = recurring.fsm_frequency_set_id.create(
+                {"name": recurring.name, "is_quick_edit": True,}
             )
             recurring.fsm_frequency_set_id.fsm_frequency_ids = (
                 recurring.fsm_frequency_ids
@@ -94,7 +93,7 @@ class FSMRecurringOrder(models.Model):
         for recurring in self:
             if not recurring.fsm_frequency_set_id:
                 recurring.fsm_frequency_set_id = recurring.fsm_frequency_set_id.create(
-                    {"name": self.name, "is_quick_edit": True,}
+                    {"name": recurring.name, "is_quick_edit": True,}
                 )
                 recurring.fsm_frequency_set_id.fsm_frequency_ids = (
                     recurring.fsm_frequency_ids
@@ -131,14 +130,14 @@ class FSMRecurringOrder(models.Model):
         if not self.frequency_type == "edit_inplace":
             return "Not Quickedit"  # TODO do it better
 
-        if not self.fsm_frequency_set_qedit_id:
-            self.fsm_frequency_set_qedit_id = self.fsm_frequency_set_qedit_id.create(
+        if not self.fsm_frequency_set_id:
+            self.fsm_frequency_set_id = self.fsm_frequency_set_id.create(
                 {"name": self.name, "is_quick_edit": True,}
             )
 
         freqs = self.env["fsm.frequency"].create(fsm)
-        previous = self.fsm_frequency_set_qedit_id.fsm_frequency_ids
-        self.fsm_frequency_set_qedit_id.fsm_frequency_ids = [(6, 0, freqs.ids)]
+        previous = self.fsm_frequency_set_id.fsm_frequency_ids
+        self.fsm_frequency_set_id.fsm_frequency_ids = [(6, 0, freqs.ids)]
         previous.unlink()
-        self.fsm_frequency_set_id = self.fsm_frequency_set_qedit_id
+        self.fsm_frequency_set_id = self.fsm_frequency_set_id
         return
