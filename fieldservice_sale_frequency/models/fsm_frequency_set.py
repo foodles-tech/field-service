@@ -8,6 +8,6 @@ from odoo import _, fields, models
 class FSMFrequencySet(models.Model):
     _inherit = "fsm.frequency.set"
 
-    is_used_in_sale_line = fields.Boolean()
+    is_abstract = fields.Boolean(oldname="is_abstract")
     # todo: rename it like
-    # is_abstract
+

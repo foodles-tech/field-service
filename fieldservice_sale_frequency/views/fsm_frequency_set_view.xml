@@ -5,7 +5,7 @@
         <field name="inherit_id" ref="fieldservice_recurring.fsm_frequency_set_form_view" />
         <field name="arch" type="xml">
             <field name="active" position="after">
-                <field name="is_used_in_sale_line" />
+                <field name="is_abstract" />
             </field>
         </field>
     </record>
