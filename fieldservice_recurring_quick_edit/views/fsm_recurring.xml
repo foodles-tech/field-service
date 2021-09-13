@@ -47,13 +47,14 @@
                         create="false"
                     >
                         <tree editable="bottom">
-                            <field name="day_quick_edit" />
+                            <field name="day_quick_edit" attrs="{'readonly': [('is_quick_editable', '=', False)]}" />
                             <field name="name" />
                             <field name="interval_frequency" />
-                            <field name="interval_type" readonly="1" />
+                            <field name="interval_type" />
                             <field name="planned_hour" widget="float_time" />
                             <field name="use_planned_hour" invisible="1" />
                             <field name="use_byweekday" invisible="1" />
+                            <field name="is_quick_editable"/>
                             <field name="mo" invisible="1" />
                             <field name="tu" invisible="1" />
                             <field name="we" invisible="1" />
@@ -76,7 +77,7 @@
                                     <field name="sa" invisible="1" />
                                     <field name="su" invisible="1" />
                                     <field name="planned_hour" widget="float_time" />
-                                    <field name="interval_type" readonly="1" />
+                                    <field name="interval_type"/>
                                     <field name="use_planned_hour" invisible="1" />
                                     <field name="use_byweekday" invisible="1" />
                                 </group>

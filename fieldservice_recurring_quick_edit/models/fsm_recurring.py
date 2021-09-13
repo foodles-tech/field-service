@@ -10,7 +10,9 @@ class FSMRecurringOrder(models.Model):
 
     fsm_frequency_set_id = fields.Many2one(required=False)
     fsm_frequency_qedit_ids = fields.One2many(
-        "fsm.frequency", "fsm_recurring_id", domain="[('is_quick_editable','=', True)]",
+        "fsm.frequency", "fsm_recurring_id",
+        copy=False,
+        domain="[('is_quick_editable','=', True)]",
     )
     fsm_abstract_frequency_set_id = fields.Many2one(
         "fsm.frequency.set",
@@ -27,8 +29,8 @@ class FSMRecurringOrder(models.Model):
     fsm_frequency_ids = fields.One2many(
         "fsm.frequency",
         "fsm_recurring_id",
-        compute="_calc_fsm_frequency_ids",
-        inverse="_inverse_fsm_frequency_ids",
+        # compute="_calc_fsm_frequency_ids",
+        # inverse="_inverse_fsm_frequency_ids",
         string="Frequency Rules",
     )
 

@@ -42,7 +42,6 @@ class FSMFrequency(models.Model):
             ("su", "Sunday"),
         ],
         compute="_compute_day_quick_edit",
-        inverse="_inverse_day_quick_edit",
         default="mo",
     )
     week_day = fields.Char(compute="_calc_week_day")
@@ -57,50 +56,53 @@ class FSMFrequency(models.Model):
             result.append((freq.id, name))
         return result
 
-    def _inverse_day_quick_edit(self):
-        for rec in self:
-            rec.onchange_day_quick_edit()
-
-    @api.depends("is_quick_editable", "mo", "tu", "we", "th", "fr", "sa", "su")
+    @api.depends("mo", "tu", "we", "th", "fr", "sa", "su")
     def _compute_day_quick_edit(self):
         for rec in self:
-            if rec.is_quick_editable:
-                weekdays = ["mo", "tu", "we", "th", "fr", "sa", "su"]
-                day_value = False
-                for field in weekdays:
-                    if rec[field]:
-                        day_value = field
-                rec.day_quick_edit = day_value
+            rec.day_quick_edit = False
+            weekdays = ["mo", "tu", "we", "th", "fr", "sa", "su"]
+            for field in weekdays:
+                if rec[field]:
+                    rec.day_quick_edit  = field
 
+    @api.depends("mo", "tu", "we", "th", "fr", "sa", "su")
     def _compute_is_quick_editable(self):
         for rec in self:
-            rec.is_quick_editable = (
-                rec.interval_type == "weekly" and len(rec._byweekday()) == 1
-            )
+            nb_dayselected = 0
+            weekdays = ["mo", "tu", "we", "th", "fr", "sa", "su"]
+            for field in weekdays:
+                if rec[field]:
+                    nb_dayselected += 1
+            rec.is_quick_editable = nb_dayselected == 1
 
     @api.onchange("day_quick_edit")
     def onchange_day_quick_edit(self):
         if not self.day_quick_edit:
             self.name = ""
+            return
         days = {
-            "mo": "Monday",
-            "tu": "Tuesday",
-            "we": "Wednesday",
-            "th": "Thuesday",
-            "fr": "Friday",
-            "sa": "Saturday",
-            "su": "Sunday",
+            "mo": _("Monday"),
+            "tu": _("Tuesday"),
+            "we": _("Wednesday"),
+            "th": _("Thuesday"),
+            "fr": _("Friday"),
+            "sa": _("Saturday"),
+            "su": _("Sunday"),
         }
         weekdays = ["mo", "tu", "we", "th", "fr", "sa", "su"]
-        for field in weekdays:
-            self[field] = False
+
+        weekdays.remove(self.day_quick_edit)
         self[self.day_quick_edit] = True
-        self.name = days[self.day_quick_edit]
+        self.name = self.day_quick_edit and days[self.day_quick_edit] or ""
         self.use_byweekday = True
+        for field in weekdays:
+            print(field)
+            self[field] = False
+
 
     def _calc_week_day(self):
         for rec in self:
-            rec.week_day = ",".join(["%s" % d for d in rec._byweekday()])
+            rec.week_day = ",".join(["%s" % d for d in (rec._byweekday() or [] )])
 
     @api.onchange("use_planned_hour")
     def _onchange_use_planned_hour(self):
@@ -127,8 +129,8 @@ class FSMFrequency(models.Model):
     @api.constrains("week_day", "planned_hour")
     def _check_planned_hour(self):
         for rec in self:
-            if not rec.week_day:
-                raise UserError(_("Week day must be set"))
+            # if not rec.week_day:
+            #     raise UserError(_("Week day must be set"))
             if rec.use_planned_hour:
                 hours, minutes = rec._byhours()
                 if not 0 <= hours <= 23:
