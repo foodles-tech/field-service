@@ -22,7 +22,8 @@ INTERVAl_FREQUENCIES = [
 class FSMFrequency(models.Model):
     _inherit = "fsm.frequency"
 
-    fsm_recurring_id = fields.Many2one("fsm.recurring", "Recurring order")
+    fsm_recurring_id = fields.Many2one("fsm.recurring", "Recurring order",
+        ondelete='cascade')
     # simple edit helper with planned_hour precision
     interval_frequency = fields.Selection(INTERVAl_FREQUENCIES)
     use_planned_hour = fields.Boolean()
@@ -46,6 +47,7 @@ class FSMFrequency(models.Model):
     )
     week_day = fields.Char(compute="_calc_week_day")
     #    interval_type = fields.Selection(default="weekly")
+    origin = fields.Char()
 
     def name_get(self):
         result = []

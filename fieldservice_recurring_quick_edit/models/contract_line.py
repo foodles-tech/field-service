@@ -14,3 +14,15 @@ class ContractLine(models.Model):
         values = super()._field_create_fsm_recurring_prepare_values()
         values["fsm_abstract_frequency_set_id"] = self.fsm_frequency_set_id.id
         return values
+
+    def _field_create_fsm_recurring(self):
+        result = super()._field_create_fsm_recurring()
+        for line in self:
+            if line.fsm_frequency_set_id.fsm_frequency_ids:
+                recurring= result[line.id]
+                frequencies = self.env["fsm.frequency"]
+                for freq in line.fsm_frequency_set_id.fsm_frequency_ids:
+                    frequencies |= freq.copy({"fsm_recurring_id": recurring.id,
+                        "origin": line.fsm_frequency_set_id.name})
+                recurring.fsm_frequency_ids= frequencies
+        return result

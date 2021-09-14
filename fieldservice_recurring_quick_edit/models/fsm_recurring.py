@@ -2,8 +2,9 @@
 # Copyright (C) 2021 Akretion <raphael.reverdy@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
 from odoo import api, fields, models
-
+_logger = logging.getLogger(__name__)
 
 class FSMRecurringOrder(models.Model):
     _inherit = "fsm.recurring"
@@ -38,10 +39,11 @@ class FSMRecurringOrder(models.Model):
     def onchange_fsm_abstract_frequency_set_id(self):
         if not self.fsm_abstract_frequency_set_id:
             return
-        frequencys = self.env["fsm.frequency"]
+        frequencies = self.env["fsm.frequency"]
         for freq in self.fsm_abstract_frequency_set_id.fsm_frequency_ids:
-            frequencys |= freq.copy()
-        self.fsm_frequency_ids = frequencys
+            frequencies |= freq.copy({"fsm_recurring_id": self.id,
+                "origin": self.fsm_abstract_frequency_set_id.name})
+        self.fsm_frequency_ids = frequencies
 
     def _inverse_fsm_frequency_ids(self):
         for rec in self:
