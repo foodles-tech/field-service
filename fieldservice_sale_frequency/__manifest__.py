@@ -4,16 +4,13 @@
 
 {
     "name": "Field Service - Sales - Frequency Set",
-    "version": "14.0.1.0.0",
+    "version": "14.0.2.0.0",
     "summary": "Define frequencies with simple Frequency Set.",
     "category": "Field Service",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/field-service",
     "depends": ["fieldservice_recurring", "fieldservice_sale"],
-    "data": [
-        "views/fsm_frequency_set_view.xml",
-        "views/sale_order_view.xml",
-    ],
+    "data": ["views/fsm_frequency_set_view.xml", "views/sale_order_view.xml",],
     "license": "AGPL-3",
     "development_status": "Beta",
     "installable": True,

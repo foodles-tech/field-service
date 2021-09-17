@@ -10,4 +10,3 @@ class FSMFrequencySet(models.Model):
 
     is_abstract = fields.Boolean(oldname="is_abstract")
     # todo: rename it like
-

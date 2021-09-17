@@ -13,5 +13,5 @@ class SaleOrderLine(models.Model):
         "Frequency SET",
         index=True,
         help="Frequency of the service",
-        domain=[('is_abstract', '=', True )]
+        domain=[("is_abstract", "=", True)],
     )

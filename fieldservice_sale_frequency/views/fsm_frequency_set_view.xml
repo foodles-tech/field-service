@@ -2,7 +2,10 @@
 <odoo>
     <record id="fsm_frequency_set_form_view_inherit_sale" model="ir.ui.view">
         <field name="model">fsm.frequency.set</field>
-        <field name="inherit_id" ref="fieldservice_recurring.fsm_frequency_set_form_view" />
+        <field
+            name="inherit_id"
+            ref="fieldservice_recurring.fsm_frequency_set_form_view"
+        />
         <field name="arch" type="xml">
             <field name="active" position="after">
                 <field name="is_abstract" />
