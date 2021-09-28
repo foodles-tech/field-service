@@ -14,6 +14,7 @@ class FSMRecurringOrder(models.Model):
         "fsm.frequency", "fsm_recurring_id",
         copy=False,
         domain="[('is_quick_editable','=', True)]",
+        help="Technical fields used to allow a quick edit of fsm_frequency_ids"
     )
     fsm_abstract_frequency_set_id = fields.Many2one(
         "fsm.frequency.set",
@@ -40,10 +41,17 @@ class FSMRecurringOrder(models.Model):
         if not self.fsm_abstract_frequency_set_id:
             return
         frequencies = self.env["fsm.frequency"]
+        freq_list = [(5, 0, 0)]
         for freq in self.fsm_abstract_frequency_set_id.fsm_frequency_ids:
-            frequencies |= freq.copy({"fsm_recurring_id": self.id,
-                "origin": self.fsm_abstract_frequency_set_id.name})
-        self.fsm_frequency_ids = frequencies
+            copied_vals = freq.copy_data()[0]
+            # copied_vals['fsm_recurring_id'] = self.id
+            copied_vals['origin'] = self.fsm_abstract_frequency_set_id.name
+            freq_list.append((0,0,copied_vals))
+            # frequencies |= frequencies.new(copied_vals)
+        if self.edit_type == "quick_edit":
+            self.fsm_frequency_qedit_ids = freq_list
+        else:
+            self.fsm_frequency_ids = freq_list
 
     def _inverse_fsm_frequency_ids(self):
         for rec in self:
@@ -102,46 +110,8 @@ class FSMRecurringOrder(models.Model):
                 recurring.fsm_frequency_set_id.fsm_frequency_ids = (
                     recurring.fsm_frequency_ids
                 )
+            else:
+                recurring.fsm_frequency_set_id.fsm_frequency_ids = (
+                    recurring.fsm_frequency_ids
+                )
         return result
-
-    def generate_5w(self):
-        if self.start_date:
-            planned_hour = self.start_date.hour + self.start_date.minute / 60
-        else:
-            planned_hour = False
-
-        base = {
-            "name": "5w",
-            "interval_type": "weekly",
-            "use_byweekday": True,
-            "use_planned_hour": True,
-            "interval_frequency": "6",  # each
-            "is_quick_edit": True,
-            "planned_hour": planned_hour,
-        }
-
-        days = [
-            {"mo": True, "name": "Monday %s" % self.name},
-            {"tu": True, "name": "Tuesday %s" % self.name},
-            {"we": True, "name": "Wednesday %s" % self.name},
-            {"th": True, "name": "Thuesday %s" % self.name},
-            {"fr": True, "name": "Friday %s" % self.name},
-            {"sa": True, "name": "Saturday %s" % self.name},
-            {"su": True, "name": "Sunday %s" % self.name},
-        ]
-        # base | day is python3.9
-        fsm = [{**base, **day} for day in days]
-        if not self.frequency_type == "edit_inplace":
-            return "Not Quickedit"  # TODO do it better
-
-        if not self.fsm_frequency_set_id:
-            self.fsm_frequency_set_id = self.fsm_frequency_set_id.create(
-                {"name": self.name, "is_quick_edit": True,}
-            )
-
-        freqs = self.env["fsm.frequency"].create(fsm)
-        previous = self.fsm_frequency_set_id.fsm_frequency_ids
-        self.fsm_frequency_set_id.fsm_frequency_ids = [(6, 0, freqs.ids)]
-        previous.unlink()
-        self.fsm_frequency_set_id = self.fsm_frequency_set_id
-        return

@@ -23,7 +23,7 @@ class FSMFrequency(models.Model):
     _inherit = "fsm.frequency"
 
     fsm_recurring_id = fields.Many2one("fsm.recurring", "Recurring order",
-        ondelete='cascade')
+        ondelete='cascade', readonly=True)
     # simple edit helper with planned_hour precision
     interval_frequency = fields.Selection(INTERVAl_FREQUENCIES)
     use_planned_hour = fields.Boolean()

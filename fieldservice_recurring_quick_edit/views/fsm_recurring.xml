@@ -22,12 +22,6 @@
                     string="Generate Orders"
                     type="object"
                 />
-                <button
-                    id="generate_5w"
-                    name="generate_5w"
-                    string="Generate 5w FSM"
-                    type="object"
-                />
             </button>
             <field name="fsm_frequency_set_id" position="attributes">
                 <attribute name="attrs">{'readonly': True}</attribute>
@@ -38,7 +32,8 @@
                     <field name="fsm_abstract_frequency_set_id" />
                     <field
                         name="fsm_frequency_qedit_ids"
-                        attrs="{'invisible': [('edit_type', '=', 'advanced')]}"
+                        attrs="{'invisible': [('edit_type', '=', 'advanced')],
+                                'readonly': [('edit_type', '=', 'advanced')]}"
                         widget="section_and_note_one2many"
                         mode="tree,form"
                         context="{'default_fsm_recurring_id': active_id,
@@ -87,7 +82,8 @@
                     </field>
                     <field
                         name="fsm_frequency_ids"
-                        attrs="{'invisible': [('edit_type', '=', 'quick_edit')]}"
+                        attrs="{'invisible': [('edit_type', '=', 'quick_edit')],
+                                'readonly': [('edit_type', '=', 'quick_edit')]}"
                         widget="section_and_note_one2many"
                         mode="tree"
                         context="{'default_fsm_recurring_id': active_id,
