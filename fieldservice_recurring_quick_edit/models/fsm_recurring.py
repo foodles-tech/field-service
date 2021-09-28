@@ -3,18 +3,22 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
+
 from odoo import api, fields, models
+
 _logger = logging.getLogger(__name__)
+
 
 class FSMRecurringOrder(models.Model):
     _inherit = "fsm.recurring"
 
     fsm_frequency_set_id = fields.Many2one(required=False)
     fsm_frequency_qedit_ids = fields.One2many(
-        "fsm.frequency", "fsm_recurring_id",
+        "fsm.frequency",
+        "fsm_recurring_id",
         copy=False,
         domain="[('is_quick_editable','=', True)]",
-        help="Technical fields used to allow a quick edit of fsm_frequency_ids"
+        help="Technical fields used to allow a quick edit of fsm_frequency_ids",
     )
     fsm_abstract_frequency_set_id = fields.Many2one(
         "fsm.frequency.set",
@@ -45,8 +49,8 @@ class FSMRecurringOrder(models.Model):
         for freq in self.fsm_abstract_frequency_set_id.fsm_frequency_ids:
             copied_vals = freq.copy_data()[0]
             # copied_vals['fsm_recurring_id'] = self.id
-            copied_vals['origin'] = self.fsm_abstract_frequency_set_id.name
-            freq_list.append((0,0,copied_vals))
+            copied_vals["origin"] = self.fsm_abstract_frequency_set_id.name
+            freq_list.append((0, 0, copied_vals))
             # frequencies |= frequencies.new(copied_vals)
         if self.edit_type == "quick_edit":
             self.fsm_frequency_qedit_ids = freq_list

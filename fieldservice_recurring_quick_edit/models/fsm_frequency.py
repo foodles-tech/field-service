@@ -22,8 +22,9 @@ INTERVAl_FREQUENCIES = [
 class FSMFrequency(models.Model):
     _inherit = "fsm.frequency"
 
-    fsm_recurring_id = fields.Many2one("fsm.recurring", "Recurring order",
-        ondelete='cascade', readonly=True)
+    fsm_recurring_id = fields.Many2one(
+        "fsm.recurring", "Recurring order", ondelete="cascade", readonly=True
+    )
     # simple edit helper with planned_hour precision
     interval_frequency = fields.Selection(INTERVAl_FREQUENCIES)
     use_planned_hour = fields.Boolean()
@@ -65,7 +66,7 @@ class FSMFrequency(models.Model):
             weekdays = ["mo", "tu", "we", "th", "fr", "sa", "su"]
             for field in weekdays:
                 if rec[field]:
-                    rec.day_quick_edit  = field
+                    rec.day_quick_edit = field
 
     @api.depends("mo", "tu", "we", "th", "fr", "sa", "su")
     def _compute_is_quick_editable(self):
@@ -101,10 +102,9 @@ class FSMFrequency(models.Model):
             print(field)
             self[field] = False
 
-
     def _calc_week_day(self):
         for rec in self:
-            rec.week_day = ",".join(["%s" % d for d in (rec._byweekday() or [] )])
+            rec.week_day = ",".join(["%s" % d for d in (rec._byweekday() or [])])
 
     @api.onchange("use_planned_hour")
     def _onchange_use_planned_hour(self):
