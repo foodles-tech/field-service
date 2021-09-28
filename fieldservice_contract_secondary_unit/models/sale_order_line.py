@@ -16,7 +16,7 @@ class SaleOrderLine(models.Model):
         res = super()._prepare_contract_line_values(
             contract, predecessor_contract_line_id
         )
-        res["secondary_uom_id"] = self.secondary_uom_id
+        res["secondary_uom_id"] = self.secondary_uom_id.id
         res["secondary_uom_qty"] = self.secondary_uom_qty
         return res
 
