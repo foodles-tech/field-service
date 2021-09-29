@@ -2,7 +2,9 @@
 # Copyright (C) 2021 Akretion <raphael.reverdy@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import pytz
 from dateutil.rrule import rrule
+import datetime
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -114,11 +116,24 @@ class FSMFrequency(models.Model):
         for freq in self:
             freq.use_byweekday = freq.use_planned_hour
 
+    @api.onchange("planned_hour")
+    def _onchange_planned_hour(self):
+        """
+        Checks use_planned_hour boolean
+        """
+        for freq in self:
+            freq.use_planned_hour = freq.planned_hour != 0
+
     def _byhours(self):
         self.ensure_one()
         if not self.use_planned_hour or not self.week_day or self.week_day == "none":
             return None, None
-        hours, minutes = self._split_time_to_hour_min(self.planned_hour)
+        tzhours, minutes = self._split_time_to_hour_min(self.planned_hour)
+        #todo set timezone on company. if user tz is not defined we can use company tz
+        user_tz = pytz.timezone(self.env.user.tz) or pytz.timezone('Europe/Paris')
+        dt = datetime.datetime.now(user_tz)
+        dt = dt.replace(hour=tzhours)
+        hours = dt.astimezone(pytz.utc).hour
         return hours, minutes
 
     def _split_time_to_hour_min(self, time):
