@@ -21,7 +21,6 @@ class FSMRecurringOrder(models.Model):
         compute="_calc_fsm_frequency_ids",
         inverse="_inverse_fsm_frequency_ids",
         help="Technical fields used to allow a quick edit of fsm_frequency_ids",
-
     )
     fsm_abstract_frequency_set_id = fields.Many2one(
         "fsm.frequency.set",
@@ -36,9 +35,7 @@ class FSMRecurringOrder(models.Model):
         default="quick_edit",
     )
     fsm_frequency_ids = fields.One2many(
-        "fsm.frequency",
-        "fsm_recurring_id",
-        string="Frequency Rules",
+        "fsm.frequency", "fsm_recurring_id", string="Frequency Rules",
     )
 
     @api.onchange("fsm_abstract_frequency_set_id")
