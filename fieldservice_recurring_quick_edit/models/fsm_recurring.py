@@ -18,7 +18,10 @@ class FSMRecurringOrder(models.Model):
         "fsm_recurring_id",
         copy=False,
         domain="[('is_quick_editable','=', True)]",
+        compute="_calc_fsm_frequency_ids",
+        inverse="_inverse_fsm_frequency_ids",
         help="Technical fields used to allow a quick edit of fsm_frequency_ids",
+
     )
     fsm_abstract_frequency_set_id = fields.Many2one(
         "fsm.frequency.set",
@@ -35,8 +38,6 @@ class FSMRecurringOrder(models.Model):
     fsm_frequency_ids = fields.One2many(
         "fsm.frequency",
         "fsm_recurring_id",
-        # compute="_calc_fsm_frequency_ids",
-        # inverse="_inverse_fsm_frequency_ids",
         string="Frequency Rules",
     )
 
@@ -59,12 +60,14 @@ class FSMRecurringOrder(models.Model):
 
     def _inverse_fsm_frequency_ids(self):
         for rec in self:
-            rec.fsm_frequency_set_id.fsm_frequency_ids = rec.fsm_frequency_ids
+            rec.fsm_frequency_ids = rec.fsm_frequency_qedit_ids
 
     @api.depends("fsm_frequency_set_id.fsm_frequency_ids")
     def _calc_fsm_frequency_ids(self):
         for rec in self:
-            rec.fsm_frequency_ids = rec.fsm_frequency_set_id.fsm_frequency_ids
+            rec.fsm_frequency_qedit_ids = rec.fsm_frequency_ids.filtered(
+                lambda f: f.is_quick_editable
+            )
 
     def action_view_fms_order(self):
         # TODO: move this in parent

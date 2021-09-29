@@ -20,13 +20,12 @@ class ContractLine(models.Model):
         for line in self:
             if line.fsm_frequency_set_id.fsm_frequency_ids:
                 recurring = result[line.id]
-                frequencies = self.env["fsm.frequency"]
+                freq_list = [(5, 0, 0)]
                 for freq in line.fsm_frequency_set_id.fsm_frequency_ids:
-                    frequencies |= freq.copy(
-                        {
-                            "fsm_recurring_id": recurring.id,
-                            "origin": line.fsm_frequency_set_id.name,
-                        }
-                    )
-                recurring.fsm_frequency_ids = frequencies
+                    copied_vals = freq.copy_data()[0]
+                    # copied_vals['fsm_recurring_id'] = self.id
+                    copied_vals[
+                        "origin"] = self.fsm_abstract_frequency_set_id.name
+                    freq_list.append((0, 0, copied_vals))
+                recurring.fsm_frequency_ids = freq_list
         return result
