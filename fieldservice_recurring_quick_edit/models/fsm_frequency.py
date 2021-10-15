@@ -117,6 +117,19 @@ class FSMFrequency(models.Model):
         for freq in self:
             freq.use_byweekday = freq.use_planned_hour
 
+    @api.onchange("interval_frequency")
+    def _onchange_interval_frequency(self):
+        """
+        Checks use_bypose boolean
+        """
+        for freq in self:
+            if not freq.interval_frequency or freq.interval_frequency == "6":
+                freq.set_pos = 0
+            elif freq.interval_frequency == "5":
+                freq.set_pos = -1
+            else:
+                freq.set_pos = int(freq.interval_frequency)
+
     @api.onchange("planned_hour")
     def _onchange_planned_hour(self):
         """
@@ -131,7 +144,11 @@ class FSMFrequency(models.Model):
             return None, None
         tzhours, minutes = self._split_time_to_hour_min(self.planned_hour)
         # todo set timezone on company. if user tz is not defined we can use company tz
-        user_tz = pytz.timezone(self.env.user.tz) or pytz.timezone("Europe/Paris")
+        user_tz = (
+            self.env.user.tz
+            and pytz.timezone(self.env.user.tz)
+            or pytz.timezone("Europe/Paris")
+        )
         dt = datetime.datetime.now(user_tz)
         dt = dt.replace(hour=tzhours)
         hours = dt.astimezone(pytz.utc).hour
