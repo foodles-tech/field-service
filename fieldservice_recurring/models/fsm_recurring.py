@@ -182,7 +182,9 @@ class FSMRecurringOrder(models.Model):
         schedule_date = date if date else datetime.now()
         days_early = self.fsm_frequency_set_id.buffer_early
         earliest_date = schedule_date + relativedelta(days=-days_early)
-        scheduled_duration = self.scheduled_duration or self.fsm_order_template_id.duration
+        scheduled_duration = (
+            self.scheduled_duration or self.fsm_order_template_id.duration
+        )
         return {
             "fsm_recurring_id": self.id,
             "location_id": self.location_id.id,
