@@ -7,6 +7,11 @@
                 <field
                     name="fsm_frequency_set_id"
                     context="{'default_is_abstract': True}"
+                    options="{'no_create': True, 'no_open': True}"
+                />
+                <field
+                    name="fsm_order_type_id"
+                    options="{'no_create': True, 'no_open': True}"
                 />
             </xpath>
             <xpath
@@ -16,6 +21,11 @@
                 <field
                     name="fsm_frequency_set_id"
                     context="{'default_is_abstract': True}"
+                    options="{'no_create': True, 'no_open': True}"
+                />
+                <field
+                    name="fsm_order_type_id"
+                    options="{'no_create': True, 'no_open': True}"
                 />
             </xpath>
         </field>
