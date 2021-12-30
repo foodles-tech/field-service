@@ -1,5 +1,6 @@
 # Copyright (C) 2020 Akretion (https://www.akretion.com)
 # @author Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
+# @author Raphaël Reverdy <raphael.reverdy@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
@@ -9,7 +10,7 @@
     "category": "Field Service",
     "author": "Akretion, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/field-service",
-    "depends": ["fieldservice_recurring", "fieldservice_sale"],
+    "depends": ["fieldservice_sale_recurring"],
     "data": ["views/fsm_frequency_set_view.xml", "views/sale_order_view.xml",],
     "license": "AGPL-3",
     "development_status": "Beta",
