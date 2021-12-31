@@ -7,6 +7,14 @@ from odoo import api, fields, models
 class FSMPerson(models.Model):
     _inherit = "fsm.person"
 
+    _sql_constraints = [
+        (
+            "fsm_person_employee_unicity",
+            "unique (employee_id)",
+            "Employee already linked to an FSM person",
+        ),
+    ]
+
     employee_id = fields.Many2one(
         "hr.employee",
         string="Related Employee",
