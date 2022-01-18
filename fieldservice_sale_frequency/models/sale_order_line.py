@@ -15,6 +15,7 @@ class SaleOrderLine(models.Model):
         help="Frequency of the service",
         domain=[("is_abstract", "=", True)],
     )
+
     def _field_service_generation(self):
         """For service lines, create the field service order or requiring order
         depending on  fsm_frequency_set_id. If it already
@@ -30,3 +31,9 @@ class SaleOrderLine(models.Model):
             else:
                 so_line._field_find_fsm_order()
         return result
+    
+    def _field_create_fsm_recurring_prepare_values(self):
+        self.ensure_one()
+        values = super()._field_create_fsm_recurring_prepare_values()
+        values["fsm_abstract_frequency_set_id"] = self.fsm_frequency_set_id.id
+        return values
