@@ -33,14 +33,14 @@ class FSMRecurringOrder(models.Model):
         help="Technical field used to allow a quick edit of fsm_frequency_ids",
     )
     fsm_concrete_frequency_ids = fields.Many2many(
-        related="fsm_concrete_frequency_set_id.fsm_concrete_frequency_ids"
-        # fsm_concrete_frequency_set_id.concrete_frequency_ids ?
-#        "fsm.frequency", "fsm_recurring_id", string="Frequency Rules",
+        # do not work if related
+        "fsm.frequency",
+        compute="_compute_fsm_concrete_frequency_ids",
+        inverse="_inverse_fsm_concrete_frequency_ids",
     )
     fsm_frequency_ids = fields.Many2many(
         related="fsm_frequency_set_id.fsm_frequency_ids"
     )
-
 
     fsm_concrete_frequency_set_id = fields.Many2one(
         "fsm.frequency.set",
@@ -60,6 +60,15 @@ class FSMRecurringOrder(models.Model):
         ("none", "Only abstract")],
         default="none",
     )
+
+    @api.depends("fsm_concrete_frequency_set_id.fsm_concrete_frequency_ids")
+    def _compute_fsm_concrete_frequency_ids(self):
+        for rec in self:
+            rec.fsm_concrete_frequency_ids = rec.fsm_concrete_frequency_set_id.fsm_concrete_frequency_ids
+
+    def _inverse_fsm_concrete_frequency_ids(self):
+        for rec in self:
+            rec.fsm_concrete_frequency_set_id.fsm_concrete_frequency_ids = rec.fsm_concrete_frequency_ids
 
     @api.depends("edit_type", "fsm_abstract_frequency_set_id")
     def _compute_fsm_frequency_set_id(self):
@@ -82,44 +91,63 @@ class FSMRecurringOrder(models.Model):
                 print(" on copie dans qedit ?")
 
             if rec.edit_type == "quick_edit" and rec.fsm_abstract_frequency_set_id:
-                if not len(rec.fsm_concrete_frequency_ids) == 0:
+                if not len(rec.fsm_concrete_frequency_set_id.fsm_concrete_frequency_ids) == 0:
                     # we do not know if old value was advanced or none
                     # always copy concrete freq
                     # if one wants to restart from blank
                     # just delete all the concrete lines
-                    to_add = rec.fsm_concrete_frequency_ids - rec.fsm_frequency_qedit_ids
-                    to_rm = rec.fsm_frequency_qedit_ids - rec.fsm_concrete_frequency_ids
-                    import pdb
-                    pdb.set_trace()
-                    rec.fsm_frequency_qedit_ids |= rec.fsm_concrete_frequency_ids
-                    print('on va ajouter')
-                    print(to_add.ids)
+                    rec.fsm_frequency_qedit_ids = rec.fsm_concrete_frequency_set_id.fsm_concrete_frequency_ids
                     continue
 
-                print('on copie')
-                for freq in self.fsm_abstract_frequency_set_id.fsm_frequency_ids:
-                    new_freq = freq.copy({
-                        "origin": self.fsm_abstract_frequency_set_id.name,
-                        "is_abstract": False,
-                        "fsm_recurring_id": self.id,
-                        })
-                    rec.fsm_frequency_qedit_ids |= new_freq
-                   # rec.fsm_concrete_frequency_ids |= new_freq
-                   # rec.fsm_concrete_frequency_set_id.fsm_concrete_frequency_ids = [(6, 0, rec.fsm_concrete_frequency_ids.ids)]
+                if len(rec.fsm_frequency_qedit_ids) == 0:
+                    for freq in self.fsm_abstract_frequency_set_id.fsm_frequency_ids:
+                        new_freq = freq.copy({
+                            "origin": self.fsm_abstract_frequency_set_id.name,
+                            "is_abstract": False,
+                            "fsm_recurring_id": self.id,
+                            })
+                        rec.fsm_frequency_qedit_ids |= new_freq
+                        rec.fsm_concrete_frequency_ids |= new_freq
     
     def _inverse_quickedit(self):
         for rec in self:
             if rec.fsm_frequency_qedit_ids:
-                # import pdb
-                # pdb.set_trace()
                 to_rm = rec.fsm_concrete_frequency_ids - rec.fsm_frequency_qedit_ids
                 to_rm.unlink()
-                print('vont se faire degager -')
-                print(to_rm.ids)
                 rec.fsm_concrete_frequency_ids = rec.fsm_frequency_qedit_ids
-            else:
-                print('pas de quickedit on fait rien')
 
+    @api.model
+    def create(self, values):
+        recurring = super().create(values)
+        if not recurring.fsm_concrete_frequency_set_id:
+            # always create a fsm_concrete for each recurring.
+            # it's a bit overkill but spare us lots of issues.
+            concrete_freq_set_id = self.env['fsm.frequency.set'].create(
+                {"name": recurring.name,
+                "is_abstract": False,
+            })
+            recurring.fsm_concrete_frequency_set_id = concrete_freq_set_id
+        return recurring
+
+
+    def write(self, values):
+        result = super().write(values)
+        for rec in self:
+            # kind of inverse method for related fields
+            # new frequencies may exist here but not linked to 
+            # frequency_set
+            # and unlinked frequency can be there too
+            freq_set = rec.fsm_concrete_frequency_set_id
+            if rec.edit_type == 'quick_edit':
+                frequencies = rec.fsm_frequency_qedit_ids
+            elif rec.edit_type == 'advanced':
+                frequencies = rec.fsm_frequency_ids.filtered(lambda x: not x.is_abstract)
+                to_rm = rec.fsm_concrete_frequency_ids - frequencies
+                to_rm.unlink()
+            else:
+                continue
+            freq_set.fsm_concrete_frequency_ids = [(6, 0, frequencies.ids)]
+        return result
 
     def action_view_fms_order(self):
         # TODO: move this in parent
@@ -146,51 +174,3 @@ class FSMRecurringOrder(models.Model):
         Executed from form view (call private method) _generate_orders
         """
         return self._generate_orders()
-
-    @api.model
-    def create(self, values):
-        recurring = super().create(values)
-        if not recurring.fsm_concrete_frequency_set_id:
-            # always create a fsm_concrete for each recurring.
-            # it's a bit overkill but spare us lots of issues.
-            concrete_freq_set_id = self.env['fsm.frequency.set'].create(
-                {"name": recurring.name,
-                "is_abstract": False,
-            })
-            recurring.fsm_concrete_frequency_set_id = concrete_freq_set_id
-        return recurring
-
-
-    def write(self, values):
-        result = super().write(values)
-        for rec in self:
-            # kind of inverse method for related fields
-            # new frequencies may exist here but not linked to 
-            # frequency_set
-            # and unlinked frequency can be there too
-            freq_set = rec.fsm_concrete_frequency_set_id
-            # removing abstracted will not hurt
-            import pdb
-            aa = rec.fsm_concrete_frequency_ids
-            bb = rec.fsm_frequency_ids
-            if rec.edit_type == 'quick_edit':
-                print('on sauvg quick')
-                frequencies = rec.fsm_frequency_qedit_ids
-            elif rec.edit_type == 'advanced':
-                print('on sauvg advanced')
-                frequencies = rec.fsm_frequency_ids.filtered(lambda x: not x.is_abstract)
-                to_rm = rec.fsm_concrete_frequency_ids - frequencies
-                print("on va virer")
-                print(to_rm)
-                to_rm.unlink()
-            else:
-                print('on sauvg abstract donc on quitte')
-                continue
-
-            concrete = rec.fsm_concrete_frequency_ids.filtered(lambda x: not x.is_abstract)
-            to_rm = concrete - frequencies
-            pdb.set_trace()
-            #to_rm.unlink()
-
-            freq_set.fsm_concrete_frequency_ids = [(6, 0, frequencies.ids)]
-        return result

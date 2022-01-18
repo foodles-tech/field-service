@@ -37,8 +37,7 @@
                     
                     <field
                         name="fsm_frequency_qedit_ids"
-                        attrs="{'invisible': [('edit_type', '!=', 'quick_edit')],
-                                'readonly': [('edit_type', '!=', 'quick_edit')]}"
+                        attrs="{'invisible': [('edit_type', '!=', 'quick_edit')]}"
                         widget="section_and_note_one2many"
                         mode="tree,form"
                         context="{'default_fsm_recurring_id': active_id,
@@ -89,9 +88,8 @@
                         </form>
                     </field>
                     <field
-                        name="fsm_frequency_ids"
-                        attrs="{'invisible': [('edit_type', '=', 'quick_edit')],
-                                'readonly': [('edit_type', '!=', 'advanced')]}"
+                        name="fsm_concrete_frequency_ids"
+                        attrs="{'invisible': [('edit_type', '!=', 'advanced')]}"
                         widget="section_and_note_one2many"
                         mode="tree"
                         context="{'default_fsm_recurring_id': active_id,
@@ -110,7 +108,28 @@
                             <field name="use_bymonth" invisible="1" />
                         </tree>
                     </field>
-
+                    <field
+                        name="fsm_frequency_ids"
+                        attrs="{'invisible': [('edit_type', '!=', 'none')],
+                                'readonly': [('edit_type', '==', 'none')]}"
+                        widget="section_and_note_one2many"
+                        mode="tree"
+                        context="{'default_fsm_recurring_id': active_id,
+                                      'default_interval_type': 'weekly',
+                                      'default_interval_frequency': '6',
+                                      'default_is_abstract': '1',
+                                      'form_view_ref': 'fieldservice_recurring.fsm_frequency_form_view',}"
+                    >
+                        <tree>
+                            <field name="name" />
+                            <field name="week_day" />
+                            <field name="interval_frequency" />
+                            <field name="planned_hour" widget="float_time" />
+                            <field name="interval_type" />
+                            <field name="use_byweekday" invisible="1" />
+                            <field name="use_bymonth" invisible="1" />
+                        </tree>
+                    </field>
                 </group>
             </xpath>
         </field>
