@@ -9,8 +9,3 @@ from odoo import _, fields, models
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    def _field_create_fsm_recurring_prepare_values(self):
-        self.ensure_one()
-        values = super()._field_create_fsm_recurring_prepare_values()
-        values["fsm_abstract_frequency_set_id"] = self.fsm_frequency_set_id.id
-        return values

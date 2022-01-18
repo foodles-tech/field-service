@@ -26,11 +26,12 @@ class FSMFrequency(models.Model):
     _inherit = "fsm.frequency"
 
     fsm_recurring_id = fields.Many2one(
+        # only if set.is_abstract is false
+        # it's quite hard to have a good sql constraint
         "fsm.recurring", "Recurring order", ondelete="cascade", readonly=True
     )
     # simple edit helper with planned_hour precision
-    interval_frequency = fields.Selection(INTERVAl_FREQUENCIES)
-    use_planned_hour = fields.Boolean()
+    interval_frequency = fields.Selection(INTERVAl_FREQUENCIES, default="6")
     planned_hour = fields.Float("Planned Hours")
     is_quick_editable = fields.Boolean(
         compute="_compute_is_quick_editable", default=False, store=True
@@ -109,13 +110,6 @@ class FSMFrequency(models.Model):
         for rec in self:
             rec.week_day = ",".join(["%s" % d for d in (rec._byweekday() or [])])
 
-    @api.onchange("use_planned_hour")
-    def _onchange_use_planned_hour(self):
-        """
-        Checks use_byweekday boolean
-        """
-        for freq in self:
-            freq.use_byweekday = freq.use_planned_hour
 
     @api.onchange("interval_frequency")
     def _onchange_interval_frequency(self):
@@ -130,18 +124,10 @@ class FSMFrequency(models.Model):
             else:
                 freq.set_pos = int(freq.interval_frequency)
 
-    @api.onchange("planned_hour")
-    def _onchange_planned_hour(self):
-        """
-        Checks use_planned_hour boolean
-        """
-        for freq in self:
-            freq.use_planned_hour = freq.planned_hour != 0
-
     def _byhours(self):
         self.ensure_one()
-        if not self.use_planned_hour or not self.week_day or self.week_day == "none":
-            return None, None
+        if not self.planned_hour:
+            return 0, 0
         tzhours, minutes = self._split_time_to_hour_min(self.planned_hour)
         # todo set timezone on company. if user tz is not defined we can use company tz
         user_tz = (
@@ -161,20 +147,10 @@ class FSMFrequency(models.Model):
         hours, minutes = divmod(duration_minute, 60)
         return int(hours), int(minutes)
 
-    @api.constrains("week_day", "planned_hour")
-    def _check_planned_hour(self):
-        for rec in self:
-            # if not rec.week_day:
-            #     raise UserError(_("Week day must be set"))
-            if rec.use_planned_hour:
-                hours, minutes = rec._byhours()
-                if not 0 <= hours <= 23:
-                    raise UserError(_("Planned hours must be between 0 and 23"))
-
     def _get_rrule(self, dtstart=None, until=None):
         self.ensure_one()
         if self.planned_hour:
-            # TODO move use_planned_hour to parent module
+            # TODO move planned_hour to parent module
             hours, minutes = self._byhours()
             freq = FREQUENCIES[self.interval_type]
             # to avoid bug off creation of rrule if somme args is none

@@ -28,12 +28,17 @@
             </field>
             <xpath expr="//field[@name='fsm_order_template_id']/../.." position="after">
                 <group>
-                    <field name="edit_type" />
                     <field name="fsm_abstract_frequency_set_id" />
+                </group>
+                <field name="id" invisible="1" />
+                <p attrs="{'invisible': [('id', '!=', False)]}">You must save first to change frequencies</p>
+                <group attrs="{'invisible': [('id', '=', False)]}">
+                    <field name="edit_type" />
+                    
                     <field
                         name="fsm_frequency_qedit_ids"
-                        attrs="{'invisible': [('edit_type', '=', 'advanced')],
-                                'readonly': [('edit_type', '=', 'advanced')]}"
+                        attrs="{'invisible': [('edit_type', '!=', 'quick_edit')],
+                                'readonly': [('edit_type', '!=', 'quick_edit')]}"
                         widget="section_and_note_one2many"
                         mode="tree,form"
                         context="{'default_fsm_recurring_id': active_id,
@@ -50,7 +55,6 @@
                             <field name="interval_frequency" />
                             <field name="interval_type" />
                             <field name="planned_hour" widget="float_time" />
-                            <field name="use_planned_hour" invisible="1" />
                             <field name="use_byweekday" invisible="1" />
                             <field name="set_pos" invisible="1" />
                             <field name="is_quick_editable" />
@@ -78,7 +82,6 @@
                                     <field name="su" invisible="1" />
                                     <field name="planned_hour" widget="float_time" />
                                     <field name="interval_type" />
-                                    <field name="use_planned_hour" invisible="1" />
                                     <field name="use_byweekday" invisible="1" />
                                     <field name="set_pos" invisible="1" />
                                 </group>
@@ -88,12 +91,13 @@
                     <field
                         name="fsm_frequency_ids"
                         attrs="{'invisible': [('edit_type', '=', 'quick_edit')],
-                                'readonly': [('edit_type', '=', 'quick_edit')]}"
+                                'readonly': [('edit_type', '!=', 'advanced')]}"
                         widget="section_and_note_one2many"
                         mode="tree"
                         context="{'default_fsm_recurring_id': active_id,
                                       'default_interval_type': 'weekly',
                                       'default_interval_frequency': '6',
+                                      'default_is_abstract': '1',
                                       'form_view_ref': 'fieldservice_recurring.fsm_frequency_form_view',}"
                     >
                         <tree>
@@ -102,11 +106,11 @@
                             <field name="interval_frequency" />
                             <field name="planned_hour" widget="float_time" />
                             <field name="interval_type" />
-                            <field name="use_planned_hour" invisible="1" />
                             <field name="use_byweekday" invisible="1" />
                             <field name="use_bymonth" invisible="1" />
                         </tree>
                     </field>
+
                 </group>
             </xpath>
         </field>
