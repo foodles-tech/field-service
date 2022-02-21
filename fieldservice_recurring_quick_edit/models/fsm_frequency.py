@@ -123,6 +123,7 @@ class FSMFrequency(models.Model):
                 freq.set_pos = -1
             else:
                 freq.set_pos = int(freq.interval_frequency)
+            freq.use_setpos = True
 
     def _byhours(self):
         self.ensure_one()
