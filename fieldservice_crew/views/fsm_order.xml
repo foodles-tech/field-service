@@ -18,11 +18,11 @@
                     <tree>
                         <field name="fsm_worker_id" />
                         <field name="scheduled_date_start" />
-                        <field name="scheduled_duration" />
+                        <field name="scheduled_duration" widget="float_time" />
                         <field name="scheduled_date_end" />
                     </tree>
                 </field>
-                <field name="crew_total_duration" />
+                <field name="crew_total_duration" widget="float_time" />
             </field>
         </field>
     </record>
