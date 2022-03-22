@@ -13,7 +13,11 @@ class FSMRecurringOrder(models.Model):
         "fsm_recurring_id",
         string="Recurring Members",
     )
-
+    active_crew_member_ids = fields.One2many(
+        "fsm.recurring.order.member",
+        compute="_compute_active_crew_member_ids",
+        string="Active Recurring Members",
+    )
     crew_worker_ids = fields.Many2many(
         "fsm.person",
         compute="_compute_crew_worker_ids",
@@ -39,6 +43,13 @@ class FSMRecurringOrder(models.Model):
     def _compute_crew_worker_ids(self):
         for rec in self:
             rec.crew_worker_ids = rec.crew_member_ids.mapped('fsm_worker_id')
+
+    def _compute_active_crew_member_ids(self):
+        for rec in self:
+            # Only link crew members that have an active fsm_frequency_rule
+            rec.active_crew_member_ids = rec.crew_member_ids.filtered(
+                lambda member: member.fsm_frequency_rule_id in rec.fsm_frequency_ids
+            )
 
 
 class FSMRecurringCrewMember(models.Model):

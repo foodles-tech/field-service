@@ -3,7 +3,7 @@
     <record id="fsm_recurring_form_view" model="ir.ui.view">
         <field name="name">fsm.recurring.order.form</field>
         <field name="model">fsm.recurring</field>
-        <field name="inherit_id" ref="fieldservice_recurring.fsm_recurring_form_view" />
+        <field name="inherit_id" ref="fieldservice_recurring_quick_edit.fsm_recurring_form_view" />
         <field name="arch" type="xml">
             <!-- hide person_id and replace it by crew_worker_ids -->
             <field name="person_id" position="after">
@@ -25,11 +25,12 @@
             <field name="fsm_order_ids" position="after">
                 <group>
                     <field
-                            name="crew_member_ids"
+                            name="active_crew_member_ids"
                             widget="section_and_note_one2many"
                             context="{'default_fsm_recurring_id': active_id}"
                             mode="tree,form"
                             groups="base.group_system"
+                            readonly="1"
                         >
                         <tree>
                             <field name="fsm_frequency_rule_id" />
@@ -42,6 +43,9 @@
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
             <xpath expr="//field[@name='fsm_frequency_qedit_ids']/tree/field[@name='interval_type']" position="after">
+                <field name="fsm_worker_ids" widget="many2many_tags" />
+            </xpath>
+            <xpath expr="//field[@name='fsm_concrete_frequency_ids']/tree/field[@name='interval_type']" position="after">
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
         </field>
