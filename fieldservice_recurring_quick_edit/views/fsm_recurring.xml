@@ -9,7 +9,9 @@
                     <field name="fsm_order_count" widget="statinfo" string="Orders" />
                 </button>
             </xpath>
-            <button name="action_cancel" position="before">
+            <button name="action_start" position="before">
+                <!-- Todo: move this somewhere else
+                like in the action menu instead -->
                 <button
                     id="generate_orders"
                     name="generate_orders"
