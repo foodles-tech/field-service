@@ -39,13 +39,10 @@
                     </field>
                 </group>
             </field>
-            <xpath expr="//field[@name='fsm_frequency_ids']/tree/field[@name='interval_type']" position="after">
+            <xpath expr="//field[@name='fsm_quick_edit_concrete_frequency_ids']/tree/field[@name='interval_type']" position="after">
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
-            <xpath expr="//field[@name='fsm_frequency_qedit_ids']/tree/field[@name='interval_type']" position="after">
-                <field name="fsm_worker_ids" widget="many2many_tags" />
-            </xpath>
-            <xpath expr="//field[@name='fsm_concrete_frequency_ids']/tree/field[@name='interval_type']" position="after">
+            <xpath expr="//field[@name='fsm_advanced_concrete_frequency_ids']/tree/field[@name='interval_type']" position="after">
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
         </field>
