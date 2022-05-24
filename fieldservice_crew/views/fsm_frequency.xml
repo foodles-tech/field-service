@@ -10,8 +10,10 @@
                 <field
                     name="fsm_worker_ids"
                     widget="many2many_tags"
-                    attrs="{'invisible': [('fsm_recurring_id', '=', False)]}"
                 />
+                <!--    attrs="{'invisible': [('fsm_recurring_id', '=', False)]}"
+                />
+            -->
             </field>
         </field>
     </record>

@@ -13,7 +13,7 @@ class FSMFrequency(models.Model):
     )
 
     fsm_worker_ids = fields.Many2many(
-        comodel_name="fsm.person",
+        comodel_name="hr.employee",
         inverse="_inverse_fsm_worker_ids",
         compute="_compute_fsm_worker_ids",
     )

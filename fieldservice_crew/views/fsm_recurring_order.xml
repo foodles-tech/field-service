@@ -50,12 +50,15 @@
             >
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
-            <xpath
+<!-- 
+    mettre ça dans une vue form
+            <xpath 
                 expr="//field[@name='fsm_advanced_concrete_frequency_ids']/tree/field[@name='interval_type']"
                 position="after"
             >
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
+            -->
             <xpath expr="//field[@name='fsm_concrete_frequency_ids']/tree/field[@name='interval_type']" position="after">
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
