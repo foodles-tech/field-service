@@ -18,7 +18,7 @@ class FSMRecurringOrder(models.Model):
         string="Active Recurring Members",
     )
     crew_worker_ids = fields.Many2many(
-        "fsm.person",
+        "hr.employee",
         compute="_compute_crew_worker_ids",
         readonly=True,
     )
@@ -79,7 +79,7 @@ class FSMRecurringCrewMember(models.Model):
         ondelete="cascade",
     )
 
-    fsm_worker_id = fields.Many2one("fsm.person", string="Worker", index=True)
+    fsm_worker_id = fields.Many2one("hr.employee", string="Worker", index=True)
 
     def _is_active_on_date(self, date_start, date_end):
         if self.fsm_frequency_rule_id:

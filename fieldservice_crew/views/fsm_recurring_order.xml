@@ -50,13 +50,15 @@
             >
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
+<!-- 
+    mettre ça dans une vue form
             <xpath 
                 expr="//field[@name='fsm_advanced_concrete_frequency_ids']/tree/field[@name='interval_type']"
                 position="after"
             >
                 <field name="fsm_worker_ids" widget="many2many_tags" />
             </xpath>
-        </field>
+ -->        </field>
     </record>
 
     <record id="recurring_crew_member_ids_view_form" model="ir.ui.view">
