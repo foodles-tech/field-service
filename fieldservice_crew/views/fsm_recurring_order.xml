@@ -4,26 +4,15 @@
         <field name="model">fsm.recurring</field>
         <field name="inherit_id" ref="fieldservice_recurring_quick_edit.fsm_recurring_form_view" />
         <field name="arch" type="xml">
-            <!-- hide person_id and replace it by crew_worker_ids -->
             <field name="person_id" position="after">
                 <field name="crew_worker_ids" widget="many2many_tags" />
             </field>
-            <field name="person_id" position="attributes">
-                <attribute name="invisible">True</attribute>
-            </field>
-
 
             <xpath
                 expr="//field[@name='fsm_order_ids']/tree/field[@name='person_id']"
                 position="after"
             >
                 <field name="crew_worker_ids" widget="many2many_tags" />
-            </xpath>
-            <xpath
-                expr="//field[@name='fsm_order_ids']/tree/field[@name='person_id']"
-                position="attributes"
-            >
-                <attribute name="invisible">True</attribute>
             </xpath>
 
             <!-- add workers in frequencies -->
