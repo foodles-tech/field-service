@@ -32,6 +32,6 @@ class ContractLine(models.Model):
         uom_hour = self.env.ref("uom.product_uom_hour")
         _convert_duration = self.env["sale.order.line"]._convert_duration
         for rec in self:
-            from_uom = rec.secondary_uom_id.uom_id
+            from_uom = rec.secondary_uom_id.uom_id or uom_hour
             quantity = rec.secondary_uom_qty
             rec.scheduled_duration = _convert_duration(from_uom, quantity, uom_hour)
