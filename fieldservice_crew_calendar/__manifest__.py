@@ -9,6 +9,7 @@
     "depends": [
         "fieldservice_calendar",
         "hr_employee_as_partner",
+        "fieldservice_crew",
     ],
     "auto_install": True,
 }
