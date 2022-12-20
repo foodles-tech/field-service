@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- VIEW FOR THE OBJECT : subcontractor_invoice_work -->
+    <record id="view_subcontract_work_form" model="ir.ui.view">
+        <field name="name">subcontractor.invoice.work.form</field>
+        <field name="model">subcontractor.invoice.work</field>
+        <!-- <field name="priority" eval="8"/> -->
+        <field name="arch" type="xml">
+            <form string="Generate Invoice">
+                <separator string="Generate Invoice" />
+                <p
+                >For internal Subcontractors one customer invoice will be created in the subcontracted company, for each couple /end customer invoice</p>
+                <p
+                >For external Subcontractors, one supplier invoice will be created for each Subcontractor.</p>
+                <footer>
+                    <button
+                        name="generate_invoice"
+                        string="Generate Invoice"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_subcontract_invoice_work_view" model="ir.actions.act_window">
+        <field name="name">Generate Subcontract Invoice</field>
+
+            <field name="res_model">subcontractor.invoice.work</field>
+
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_subcontract_work_form" />
+            <field name="target">new</field>
+            <field
+            name="groups_id"
+            eval="[(4, ref('account.group_account_invoice'))]"
+        />
+            <field name="binding_model_id" ref="account.model_account_move" />
+            <field name="binding_view_types">list</field>
+    </record>
+
+
+</odoo>

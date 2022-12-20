@@ -1,0 +1,47 @@
+<!-- Copyright (C) 2019 Konos
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record model="ir.ui.view" id="res_subcontractor_form">
+        <field name="name">res.subcontractor.form</field>
+        <field name="model">res.subcontractor</field>
+        <field name="arch" type="xml">
+            <form string="Subcontractor">
+                <group>
+                    <field name="subcontractor_type" />
+                    <field
+                        name="subcontractor_company_id"
+                        attrs="{'invisible': [('subcontractor_type', '!=', 'internal')]}"
+                    />
+                    <field
+                        name="subcontractor_partner_id"
+                        attrs="{'invisible': [('subcontractor_type', '=', 'internal')]}"
+                    />
+                    <field name="commission_rate" />
+                </group>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="res_subcontractor_tree">
+        <field name="name">res.subcontractor.tree</field>
+        <field name="model">res.subcontractor</field>
+        <field name="arch" type="xml">
+            <tree string="Subcontractor">
+                <field name="subcontractor_partner_id" />
+                <field name="commission_rate" />
+                <field name="subcontractor_type" />
+            </tree>
+        </field>
+    </record>
+    <record id="action_res_subcontractor_tree" model="ir.actions.act_window">
+        <field name="name">Subcontractor</field>
+        <field name="res_model">res.subcontractor</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem
+        id="res_subcontractor"
+        name="Subcontractor"
+        parent="account.account_invoicing_menu"
+        action="action_res_subcontractor_tree"
+        sequence="7"
+    />
+</odoo>

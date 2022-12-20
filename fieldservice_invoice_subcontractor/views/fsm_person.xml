@@ -1,0 +1,24 @@
+<odoo>
+    <!-- Field Service Worker -->
+    <record id="fsm_person_tree" model="ir.ui.view">
+        <field name="model">fsm.person</field>
+        <field name="inherit_id" ref="fieldservice.fsm_person_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="subcontractor_id" />
+            </field>
+        </field>
+    </record>
+
+    <record id="fsm_person_form" model="ir.ui.view">
+        <field name="name">fsm.person.form</field>
+        <field name="model">fsm.person</field>
+        <field name="inherit_id" ref="fieldservice.fsm_person_form" />
+        <field name="arch" type="xml">
+            <field name="calendar_id" position="before">
+                <div class="">Sub Contractor info</div>
+                <field name="subcontractor_id" />
+            </field>
+        </field>
+    </record>
+</odoo>

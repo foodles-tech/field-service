@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="is_line_subcontracted" />
+            </xpath>
+            <xpath
+                expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']"
+                position="before"
+            >
+                <field name="subcontracted" />
+                <field name="subcontractor_id" />
+                <field name="invalid_subcontractor_inf" invisible="1" />
+            </xpath>
+            <xpath
+                expr="//field[@name='invoice_line_ids']/form//field[@name='price_subtotal']"
+                position="before"
+            >
+                <field name="subcontracted" />
+                <field
+                    name="subcontractor_id"
+                    attrs="{'invisible': [('subcontracted', '=', False),]}"
+                />
+            </xpath>
+<!--               and field on line_ids to forget bug of data values not saved-->
+            <xpath
+                expr="//field[@name='line_ids']/tree/field[@name='price_subtotal']"
+                position="before"
+            >
+                <field name="subcontracted" invisible="1" />
+                <field name="subcontractor_id" invisible="1" />
+                <field name="invalid_subcontractor_inf" invisible="1" />
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']/tree" position="attributes">
+                <attribute
+                    name="decoration-danger"
+                >invalid_subcontractor_inf == True</attribute>
+            </xpath>
+
+        </field>
+    </record>
+    <!-- Invoice Search View -->
+    <record id="view_account_invoice_filter_subcontractor" model="ir.ui.view">
+        <field name="name">invoice.search.view.subcontractor</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='to_check']" position="after">
+                <filter
+                    name="unvalid_subcontracted"
+                    string="Subcontracted in anomaly"
+                    domain="[('is_line_subcontracted', '=', True), ('invalid_subcontractor_inf', '=', True)]"
+                />
+                <filter
+                    name="valid_subcontracted"
+                    string="Subcontracted To invoice"
+                    domain="[('is_line_subcontracted', '=', True), ('invalid_subcontractor_inf', '=', False), ('target_subcontracted_invoice_count', '=', 0), ('target_subcontracted_bill_count', '=', 0),]"
+                />
+                <filter
+                    name="valid_subcontracted"
+                    string="Subcontracted invoiced"
+                    domain="[('is_line_subcontracted', '=', True), ('invalid_subcontractor_inf', '=', False), '|', ('target_subcontracted_invoice_count', '=', 0), ('target_subcontracted_bill_count', '=', 0),]"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

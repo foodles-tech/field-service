@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+res_subcontractor_edit,access_model_res_subcontractor_edit,model_res_subcontractor,account.group_account_manager,1,1,1,1
+res_subcontractor_read,access_model_res_subcontractor_read,model_res_subcontractor,account.group_account_invoice,1,0,0,0
+subcontractor_invoice_work_edit,access_model_subcontractor_invoice_work_edit,model_subcontractor_invoice_work,account.group_account_invoice,1,1,1,1
