@@ -34,7 +34,10 @@
         <field name="model">fsm.person</field>
         <field name="arch" type="xml">
             <form string="Field Service Worker">
-                <header>
+                <field name="visibility_display_stage_management" invisible="1"/>
+                <header
+                    attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
+                    >
                     <button
                         id="previous_stage"
                         name="previous_stage"

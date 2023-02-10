@@ -72,6 +72,11 @@ class ResConfigSettings(models.TransientModel):
     )
 
     # Companies
+    no_stage_management = fields.Boolean(
+        string="Do not allow stages management",
+        related="company_id.no_stage_management",
+        readonly=False,
+    )
     auto_populate_persons_on_location = fields.Boolean(
         string="Auto-populate Workers on Location based on Territory",
         related="company_id.auto_populate_persons_on_location",

@@ -29,7 +29,10 @@
         <field name="model">fsm.location</field>
         <field name="arch" type="xml">
             <form string="Location">
-                <header>
+                <field name="visibility_display_stage_management" invisible="1"/>
+                <header
+                    attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
+                    >
                     <button
                         id="previous_stage"
                         name="previous_stage"
@@ -37,6 +40,7 @@
                         class="oe_highlight"
                         type="object"
                         groups="fieldservice.group_fsm_dispatcher"
+                        />
                     />
                     <button
                         id="next_stage"

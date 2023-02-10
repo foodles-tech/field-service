@@ -7,6 +7,9 @@ from odoo import fields, models
 class ResCompany(models.Model):
     _inherit = "res.company"
 
+    no_stage_management = fields.Boolean(
+        string="Do not allow stages management", store=True
+    )
     auto_populate_persons_on_location = fields.Boolean(
         string="Auto-populate Workers on Location based on Territory"
     )
