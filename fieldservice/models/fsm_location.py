@@ -55,6 +55,9 @@ class FSMLocation(models.Model):
     fsm_parent_id = fields.Many2one("fsm.location", string="Parent", index=True)
     notes = fields.Text(string="Location Notes")
     person_ids = fields.One2many("fsm.location.person", "location_id", string="Workers")
+    contract_line_count = fields.Integer(
+        string="Contract lines count", compute="_compute_contract_line_count"
+    )
     contact_count = fields.Integer(
         string="Contacts Count", compute="_compute_contact_ids"
     )
@@ -275,6 +278,63 @@ class FSMLocation(models.Model):
                 for loc in child_locs:
                     subloc += loc.get_action_views(0, 0, loc)
             return subloc
+
+    def _get_contract_lines(self, loc):
+        child_loc_list = self.env["fsm.location"].search(
+            [("fsm_parent_id", "=", loc.id)]
+        )
+        orders = self.env["fsm.order"].search(
+            [("location_id", "=", loc.id)]
+        )
+
+        if child_loc_list:
+            for child_loc in child_loc_list:
+                orders += self._get_contract_lines(child_loc)
+
+        return orders
+
+
+    def action_view_contract_list(self):
+        """
+        This function returns an action that display existing order lines
+        of given fsm location id and its child locations. It can
+        either be a in a list or in a form view, if there is only one
+        contact to show.
+        """
+        for location in self:
+            action = self.env["ir.actions.act_window"]._for_xml_id(
+                "fieldservice.action_fsm_operation_order"
+            )
+            contract_list = self._get_contract_lines(location)
+            action["context"] = self.env.context.copy()
+            action["context"].update({"group_by": ""})
+            action["context"].update({"default_service_location_id": self.id})
+            if len(contract_list) == 0 or len(contract_list) > 1:
+                action["domain"] = [("id", "in", contract_list.ids)]
+            elif contract_list:
+                action["views"] = [
+                    (self.env.ref("fieldservice." + "fsm_order_form").id, "form")
+                ]
+                action["res_id"] = contract_list.id
+            return action
+
+    def _get_contract_line_count(self, loc):
+        child_loc_list = self.env["fsm.location"].search(
+            [("fsm_parent_id", "=", loc.id)]
+        )
+        orders = self.env["fsm.order"].search_count(
+            [("location_id", "=", loc.id)]
+        )
+
+        if child_loc_list:
+            for child_loc in child_loc_list:
+                orders += self._get_contract_line_count(child_loc)
+
+        return orders
+
+    def _compute_contract_line_count(self):
+        for loc in self:
+            loc.contract_line_count = self._get_contract_line_count(loc);
 
     def action_view_contacts(self):
         """

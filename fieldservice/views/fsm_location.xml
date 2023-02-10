@@ -56,6 +56,18 @@
                     <div class="oe_button_box" name="button_box">
                         <button
                             type="object"
+                            name="action_view_contract_list"
+                            class="oe_stat_button"
+                            icon="fa-file-text"
+                        >
+                            <field
+                                name="contract_line_count"
+                                widget="statinfo"
+                                string="Contract lines"
+                            />
+                        </button>
+                        <button
+                            type="object"
                             name="action_view_sublocation"
                             class="oe_stat_button"
                             icon="fa-location-arrow"
