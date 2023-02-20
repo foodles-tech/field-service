@@ -5,6 +5,8 @@
         <field name="model">fsm.location</field>
         <field name="arch" type="xml">
             <tree string="Locations">
+                <field name="visibility_territory_management" invisible="1"/>
+                <field name="visibility_display_stage_management" invisible="1"/>
                 <field name="ref" />
                 <field name="complete_name" />
                 <field
@@ -12,13 +14,17 @@
                     widget="many2many_tags"
                     options="{'color_field': 'color'}"
                 />
-                <field name="stage_id" />
+                <field name="stage_id"
+                    attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
+                    />
                 <field name="street" />
                 <field name="street2" />
                 <field name="city" />
                 <field name="state_id" />
                 <field name="zip" />
-                <field name="territory_id" />
+                <field name="territory_id"
+                    attrs="{'invisible': [('visibility_territory_management', '=', False)]}"
+                    />
                 <field name="owner_id" />
             </tree>
         </field>
@@ -30,6 +36,7 @@
         <field name="arch" type="xml">
             <form string="Location">
                 <field name="visibility_display_stage_management" invisible="1"/>
+                <field name="visibility_territory_management" invisible="1"/>
                 <header
                     attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
                     >
@@ -175,7 +182,8 @@
                         <page string="Directions">
                             <field name="direction" nolabel="1" widget="html" />
                         </page>
-                        <page string="Territory">
+                        <page string="Territory"
+                            attrs="{'invisible': [('visibility_territory_management', '=', False)]}">
                             <group id="territory">
                                 <group id="territory-left">
                                     <field name="territory_id" />
@@ -260,6 +268,7 @@
         <field name="model">fsm.location</field>
         <field name="arch" type="xml">
             <search string="Search FSM Location">
+                <field name="visibility_territory_management" invisible="1"/>
                 <field
                     name="name"
                     filter_domain="['|', ('ref', 'ilike', self), ('name', 'ilike', self)]"
@@ -269,7 +278,9 @@
                 <field name="owner_id" />
                 <field name="partner_latitude" />
                 <field name="partner_longitude" />
-                <field name="territory_id" />
+                <field name="territory_id"
+                    attrs="{'invisible': [('visibility_territory_management', '=', False)]}"
+                    />
                 <field name="branch_id" />
                 <field name="district_id" />
                 <field name="region_id" />

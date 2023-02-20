@@ -22,9 +22,12 @@
         <field name="model">fsm.person</field>
         <field name="arch" type="xml">
             <search string="Search FSM Workers">
+                <field name="visibility_territory_management" invisible="1"/>
                 <field name="name" />
                 <field name="category_ids" />
-                <field name="territory_ids" />
+                <field name="territory_ids"
+                    attrs="{'invisible': [('visibility_territory_management', '=', False)]}"
+                    />
                 <field name="location_ids" />
             </search>
         </field>
@@ -35,6 +38,7 @@
         <field name="arch" type="xml">
             <form string="Field Service Worker">
                 <field name="visibility_display_stage_management" invisible="1"/>
+                <field name="visibility_territory_management" invisible="1"/>
                 <header
                     attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
                     >
@@ -164,7 +168,8 @@
                     <notebook>
                         <page name="contact" invisible="1">
                         </page>
-                        <page string="Territories">
+                        <page string="Territories"
+                            attrs="{'invisible': [('visibility_territory_management', '=', False)]}">
                             <field
                                 name="territory_ids"
                                 nolabel="1"

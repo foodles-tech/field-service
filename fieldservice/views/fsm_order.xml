@@ -392,11 +392,13 @@
                 />
                 <separator />
                 <group expand="0" string="Group By">
+                    <field name="visibility_territory_management" invisible="1"/>
                     <filter
                         name="territory_id"
                         string="Territory"
                         domain=""
                         context="{'group_by':'territory_id'}"
+                        attrs="{'invisible': [('visibility_territory_management', '=', False)]}"
                     />
                     <filter
                         name="branch_id"
