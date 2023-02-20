@@ -21,6 +21,7 @@
     "data": [
         "views/contract.xml",
         "views/contract_line.xml",
+        "views/fsm_location.xml",
         "views/fsm_recurring.xml",
         "views/fsm_order.xml",
         "views/sale_view.xml",

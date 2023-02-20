@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_fsm_location_form_contract_list" model="ir.ui.view">
+        <field name="model">fsm.location</field>
+        <field name="inherit_id" ref="fieldservice.fsm_location_form_view" />
+        <field name="arch" type="xml">
+            <div class="oe_button_box" name="button_box" position="inside">
+                <button
+                    type="object"
+                    name="action_view_contract_list"
+                    class="oe_stat_button"
+                    icon="fa-file-text"
+                >
+                    <field
+                        name="contract_line_count"
+                        widget="statinfo"
+                        string="Contract lines"
+                    />
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>
