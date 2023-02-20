@@ -82,6 +82,13 @@ class ContractLine(models.Model):
         store=True
     )
 
+    contract_user_id = fields.Many2one(
+        comodel_name="res.users",
+        string="Responsible",
+        related="contract_id.user_id",
+        readonly=True,
+    )
+
 
     @api.depends("fsm_frequency_set_id",
                  "fsm_frequency_set_id.fsm_frequency_ids",)

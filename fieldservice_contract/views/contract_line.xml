@@ -38,6 +38,15 @@
             </field>
         </field>
     </record>
-
-
+    <record id="contract_line_search_view_responsible_location" model="ir.ui.view">
+        <field name="name">contract.line.search.responsible_location</field>
+        <field name="model">contract.line</field>
+        <field name="inherit_id" ref="contract.contract_line_search_view" />
+        <field name="arch" type="xml">
+            <field name="last_date_invoiced" position="after">
+                <field name="contract_user_id"/>
+                <field name="fsm_location_id"/>
+            </field>
+        </field>
+    </record>
 </odoo>
