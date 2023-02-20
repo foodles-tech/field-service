@@ -10,6 +10,12 @@ class ResCompany(models.Model):
     no_stage_management = fields.Boolean(
         string="Do not allow stages management", store=True
     )
+    no_child_equipment = fields.Boolean(
+        string="Equipment can't have children", store=True
+    )
+    no_territory_management = fields.Boolean(
+        string="Users do not manage territory", store=True
+    )
     auto_populate_persons_on_location = fields.Boolean(
         string="Auto-populate Workers on Location based on Territory"
     )

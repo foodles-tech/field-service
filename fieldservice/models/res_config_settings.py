@@ -92,6 +92,17 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.search_on_complete_name",
         readonly=False,
     )
+    no_child_equipment = fields.Boolean(
+        string="Equipment can't have children",
+        related="company_id.no_child_equipment",
+        readonly=False,
+    )
+    no_territory_management = fields.Boolean(
+        string="Users do not manage territory",
+        related="company_id.no_territory_management",
+        readonly=False,
+    )
+
 
     # Dependencies
     @api.onchange("group_fsm_equipment")

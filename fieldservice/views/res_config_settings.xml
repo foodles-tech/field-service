@@ -88,6 +88,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="no_territory_management" />
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="no_territory_management"
+                                    string="Users do not manage territory"
+                                />
+                                <div class="text-muted">
+                                    User can not manage territory or be assigned to one
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <h2>Equipments</h2>
                     <div class="row mt16 o_settings_container" id="equipments">
@@ -102,6 +116,20 @@
                                 />
                                 <div class="text-muted">
                                     Manage equipments at the service location
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="no_child_equipment" />
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="no_child_equipment"
+                                    string="Equipments can't have children"
+                                />
+                                <div class="text-muted">
+                                    Equipments can't own other equipments
                                 </div>
                             </div>
                         </div>

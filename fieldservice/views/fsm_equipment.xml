@@ -125,7 +125,9 @@
                                 </group>
                             </group>
                         </page>
-                        <page string="Children">
+                        <field name="visibility_child_equipment" invisible="1"/>
+                        <page string="Children"
+                            attrs="{'invisible': [('visibility_child_equipment', '=', False)]}">
                             <field name="child_ids">
                                 <tree>
                                     <field name="name" />
