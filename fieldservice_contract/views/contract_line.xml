@@ -49,4 +49,11 @@
             </field>
         </field>
     </record>
+    <record id="action_location_contract_lines" model="ir.actions.act_window">
+        <field name="name">Contract Lines</field>
+        <field name="res_model">contract.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="fieldservice_contract.contract_line_search_view_responsible_location" />
+        <field name="view_id" ref="contract.contract_line_report_tree_view" />
+    </record>
 </odoo>
