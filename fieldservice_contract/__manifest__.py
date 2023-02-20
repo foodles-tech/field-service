@@ -25,6 +25,7 @@
         "views/fsm_recurring.xml",
         "views/fsm_order.xml",
         "views/sale_view.xml",
+        "views/res_partner.xml",
     ],
     "installable": True,
     "development_status": "Beta",

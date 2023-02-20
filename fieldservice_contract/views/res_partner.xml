@@ -1,0 +1,23 @@
+<odoo>
+    <record id="view_fsm_res_partner_contract_list" model="ir.ui.view">
+        <field name="name">res.partner.fsm.contract.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <div class="oe_button_box" name="button_box" position="inside">
+                <button
+                    type="object"
+                    name="action_view_contract_list"
+                    class="oe_stat_button"
+                    icon="fa-file-text"
+                >
+                    <field
+                        name="contract_line_count"
+                        widget="statinfo"
+                        string="Contract lines"
+                    />
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>
