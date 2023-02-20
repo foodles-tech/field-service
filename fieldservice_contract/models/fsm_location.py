@@ -53,7 +53,7 @@ class FSMLocation(models.Model):
             contract_list = self._get_contract_lines(location)
             action["context"] = self.env.context.copy()
             action["context"].update({"group_by": ""})
-            action["context"].update({"default_service_location_id": self.id})
+            action["context"].update({"search_default_active": True})
             if len(contract_list) == 0 or len(contract_list) > 1:
                 action["domain"] = [("id", "in", contract_list.ids)]
             elif contract_list:

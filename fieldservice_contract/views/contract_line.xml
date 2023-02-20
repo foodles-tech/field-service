@@ -47,6 +47,9 @@
                 <field name="contract_user_id"/>
                 <field name="fsm_location_id"/>
             </field>
+            <filter name="is_auto_renew" position="after">
+                <filter name="active" domain="[('active', '=', True)]" />
+            </filter>
         </field>
     </record>
     <record id="action_location_contract_lines" model="ir.actions.act_window">
