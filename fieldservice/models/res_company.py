@@ -8,10 +8,10 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     stage_management = fields.Boolean(
-        string="Do not allow stages management", store=True, default=True
+        string="Allow stage management", store=True, default=True
     )
-    no_child_equipment = fields.Boolean(
-        string="Equipment can't have children", store=True
+    child_equipment = fields.Boolean(
+        string="Equipment can have children", store=True, default=True
     )
     no_territory_management = fields.Boolean(
         string="Users do not manage territory", store=True

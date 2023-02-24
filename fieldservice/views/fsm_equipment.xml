@@ -67,6 +67,7 @@
         <field name="arch" type="xml">
             <form string="Equipment">
                 <field name="visibility_display_stage_management" invisible="1"/>
+                <field name="visibility_child_equipment" invisible="1"/>
                 <header
                     attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
                     >
@@ -95,7 +96,7 @@
                     </h1>
                     <group id="main">
                         <group id="main-left">
-                            <field name="parent_id" />
+                            <field name="parent_id" attrs="{'invisible': [('visibility_child_equipment', '=', False)]}"/>
                             <field name="person_id" />
                             <field name="location_id" />
                             <field name="current_location_id" />
@@ -125,7 +126,6 @@
                                 </group>
                             </group>
                         </page>
-                        <field name="visibility_child_equipment" invisible="1"/>
                         <page string="Children"
                             attrs="{'invisible': [('visibility_child_equipment', '=', False)]}">
                             <field name="child_ids">

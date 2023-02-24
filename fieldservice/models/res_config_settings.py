@@ -92,9 +92,9 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.search_on_complete_name",
         readonly=False,
     )
-    no_child_equipment = fields.Boolean(
+    child_equipment = fields.Boolean(
         string="Equipment can't have children",
-        related="company_id.no_child_equipment",
+        related="company_id.child_equipment",
         readonly=False,
     )
     no_territory_management = fields.Boolean(

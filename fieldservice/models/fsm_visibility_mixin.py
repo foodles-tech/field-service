@@ -26,5 +26,5 @@ class FSMVisibilityMixin(models.AbstractModel):
 
     def _compute_child_equipment(self):
         for record in self:
-            record.visibility_child_equipment = not self.env.user.company_id.no_child_equipment
+            record.visibility_child_equipment = self.env.user.company_id.child_equipment
 
