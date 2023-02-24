@@ -72,9 +72,9 @@ class ResConfigSettings(models.TransientModel):
     )
 
     # Companies
-    no_stage_management = fields.Boolean(
+    stage_management = fields.Boolean(
         string="Do not allow stages management",
-        related="company_id.no_stage_management",
+        related="company_id.stage_management",
         readonly=False,
     )
     auto_populate_persons_on_location = fields.Boolean(

@@ -18,7 +18,7 @@ class FSMVisibilityMixin(models.AbstractModel):
 
     def _compute_stage_management(self):
         for record in self:
-            record.visibility_display_stage_management = not self.env.user.company_id.no_stage_management
+            record.visibility_display_stage_management = self.env.user.company_id.stage_management
 
     def _compute_territory_management(self):
         for record in self:

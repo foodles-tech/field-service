@@ -7,8 +7,8 @@ from odoo import fields, models
 class ResCompany(models.Model):
     _inherit = "res.company"
 
-    no_stage_management = fields.Boolean(
-        string="Do not allow stages management", store=True
+    stage_management = fields.Boolean(
+        string="Do not allow stages management", store=True, default=True
     )
     no_child_equipment = fields.Boolean(
         string="Equipment can't have children", store=True
