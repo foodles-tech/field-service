@@ -118,7 +118,7 @@
                         <page string="Location">
                             <group>
                                 <group>
-                                    <field name="territory_id" />
+                                    <field name="territory_id" groups="fieldservice.group_fsm_manage_territory"/>
                                     <field name="branch_id" />
                                     <field name="district_id" />
                                     <field name="region_id" />
