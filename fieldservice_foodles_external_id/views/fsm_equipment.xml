@@ -1,0 +1,34 @@
+<odoo>
+    <!-- Field Service equipment Tree View-->
+    <record id="foodles_ext_id_fsm_equipment_tree_view" model="ir.ui.view">
+        <field name="name">foodles_ext_id.fsm.equipment.tree</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_tree_view"/>
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field name="external_id"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Field Service equipment Form View-->
+    <record id="foodles_ext_id_fsm_equipment_form_view" model="ir.ui.view">
+        <field name="name">foodles_ext_id.fsm.equipment.form</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_form_view" />
+        <field name="arch" type="xml">
+            <group id="main-right" position="inside">
+                <field name="external_id"/>
+            </group>
+        </field>
+    </record>
+    <record id="foodles_ext_id_fsm_equipment_search_view" model="ir.ui.view">
+        <field name="name">foodles_ext_id.fsm.equipment.search</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_search_view" />
+        <field name="arch" type="xml">
+            <search position="inside">
+                <field name="external_id"/>
+            </search>
+        </field>
+    </record>
+</odoo>

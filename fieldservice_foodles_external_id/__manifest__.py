@@ -10,6 +10,8 @@
     "website": "https://github.com/OCA/field-service",
     "depends": ["fieldservice"],
     "data": [
+        "views/fsm_location.xml",
+        "views/fsm_equipment.xml"
     ],
     "demo": [
     ],
