@@ -22,11 +22,10 @@
         <field name="model">fsm.person</field>
         <field name="arch" type="xml">
             <search string="Search FSM Workers">
-                <field name="visibility_territory_management" invisible="1"/>
                 <field name="name" />
                 <field name="category_ids" />
                 <field name="territory_ids"
-                    attrs="{'invisible': [('visibility_territory_management', '=', False)]}"
+                    groups="fieldservice.group_fsm_manage_territory"
                     />
                 <field name="location_ids" />
             </search>
@@ -37,10 +36,8 @@
         <field name="model">fsm.person</field>
         <field name="arch" type="xml">
             <form string="Field Service Worker">
-                <field name="visibility_display_stage_management" invisible="1"/>
-                <field name="visibility_territory_management" invisible="1"/>
                 <header
-                    attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
+                    groups="fieldservice.group_fsm_manage_stage"
                     >
                     <button
                         id="previous_stage"
@@ -169,7 +166,7 @@
                         <page name="contact" invisible="1">
                         </page>
                         <page string="Territories"
-                            attrs="{'invisible': [('visibility_territory_management', '=', False)]}">
+                            groups="fieldservice.group_fsm_manage_territory">
                             <field
                                 name="territory_ids"
                                 nolabel="1"

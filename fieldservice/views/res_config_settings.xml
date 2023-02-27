@@ -17,11 +17,11 @@
                     <div class="row mt16 o_settings_container" id="locations">
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
-                                <field name="stage_management" />
+                                <field name="group_fsm_manage_stage" />
                             </div>
                             <div class="o_setting_right_pane">
                                 <label
-                                    for="stage_management"
+                                    for="group_fsm_manage_stage"
                                     string="Manage stages"
                                 />
                                 <div class="text-muted">
@@ -90,15 +90,29 @@
                         </div>
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
-                                <field name="no_territory_management" />
+                                <field name="group_fsm_manage_territory" />
                             </div>
                             <div class="o_setting_right_pane">
                                 <label
-                                    for="no_territory_management"
-                                    string="Users do not manage territory"
+                                    for="group_fsm_manage_territory"
+                                    string="Manage territory"
                                 />
                                 <div class="text-muted">
-                                    User can not manage territory or be assigned to one
+                                    Users manage territory
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="group_fsm_manage_sub_location" />
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="group_fsm_manage_sub_location"
+                                    string="Manage sub location"
+                                />
+                                <div class="text-muted">
+                                    Users manage sub location
                                 </div>
                             </div>
                         </div>
@@ -121,11 +135,11 @@
                         </div>
                         <div class="col-xs-12 col-md-6 o_setting_box">
                             <div class="o_setting_left_pane">
-                                <field name="child_equipment" />
+                                <field name="group_fsm_children_equipment" />
                             </div>
                             <div class="o_setting_right_pane">
                                 <label
-                                    for="child_equipment"
+                                    for="group_fsm_children_equipment"
                                     string="Equipments can have children"
                                 />
                                 <div class="text-muted">

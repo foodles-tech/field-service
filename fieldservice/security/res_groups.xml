@@ -49,4 +49,27 @@
         <field name="name">Manage Field Service Order Templates</field>
         <field name="category_id" ref="base.module_category_hidden" />
     </record>
+    <!-- Feature groups -->
+    <record id="group_fsm_children_equipment" model="res.groups">
+        <field name="name">Manage Field Service Equipment Children</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+    <record id="group_fsm_manage_territory" model="res.groups">
+        <field name="name">Manage Field Service Territory</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+    <record id="group_fsm_manage_sub_location" model="res.groups">
+        <field name="name">Manage Field Service Sub locations</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+    <record id="group_fsm_manage_stage" model="res.groups">
+        <field name="name">Manage Field Service Stages</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+    <record id="base.group_user" model="res.groups">
+        <field
+            name="implied_ids"
+            eval="[(4, ref('fieldservice.group_fsm_manage_territory')), (4, ref('fieldservice.group_fsm_manage_sub_location')), (4, ref('fieldservice.group_fsm_manage_stage'))]"
+        />
+    </record>
 </odoo>

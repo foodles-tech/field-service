@@ -24,6 +24,7 @@
                         string="Territory"
                         domain=""
                         context="{'group_by':'territory_id'}"
+                        groups="fieldservice.group_fsm_manage_territory"
                     />
                     <filter
                         name="branch_id"
@@ -66,10 +67,8 @@
         <field name="model">fsm.equipment</field>
         <field name="arch" type="xml">
             <form string="Equipment">
-                <field name="visibility_display_stage_management" invisible="1"/>
-                <field name="visibility_child_equipment" invisible="1"/>
                 <header
-                    attrs="{'invisible': [('visibility_display_stage_management', '=', False)]}"
+                    groups="fieldservice.group_fsm_manage_stage"
                     >
                     <button
                         id="previous_stage"
@@ -96,7 +95,7 @@
                     </h1>
                     <group id="main">
                         <group id="main-left">
-                            <field name="parent_id" attrs="{'invisible': [('visibility_child_equipment', '=', False)]}"/>
+                            <field name="parent_id" groups="fieldservice.group_fsm_children_equipment"/>
                             <field name="person_id" />
                             <field name="location_id" />
                             <field name="current_location_id" />
@@ -126,8 +125,7 @@
                                 </group>
                             </group>
                         </page>
-                        <page string="Children"
-                            attrs="{'invisible': [('visibility_child_equipment', '=', False)]}">
+                        <page string="Children" groups="fieldservice.group_fsm_children_equipment">
                             <field name="child_ids">
                                 <tree>
                                     <field name="name" />

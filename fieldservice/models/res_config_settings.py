@@ -24,6 +24,21 @@ class ResConfigSettings(models.TransientModel):
         string="Manage Template", implied_group="fieldservice.group_fsm_template"
     )
 
+    # Features Groups
+    group_fsm_children_equipment = fields.Boolean(
+        string="Equipment Children", implied_group="fieldservice.group_fsm_children_equipment"
+    )
+    group_fsm_manage_territory = fields.Boolean(
+        string="Manage Territory", implied_group="fieldservice.group_fsm_manage_territory"
+    )
+    group_fsm_manage_sub_location = fields.Boolean(
+        string="Manage sub-locations", implied_group="fieldservice.group_fsm_manage_sub_location"
+    )
+    group_fsm_manage_stage = fields.Boolean(
+        string="Manage Stages", implied_group="fieldservice.group_fsm_manage_stage"
+    )
+
+
     # Modules
     module_fieldservice_account = fields.Boolean(string="Invoice your FSM orders")
     module_fieldservice_activity = fields.Boolean(string="Manage FSM Activities")
@@ -72,11 +87,6 @@ class ResConfigSettings(models.TransientModel):
     )
 
     # Companies
-    stage_management = fields.Boolean(
-        string="Do not allow stages management",
-        related="company_id.stage_management",
-        readonly=False,
-    )
     auto_populate_persons_on_location = fields.Boolean(
         string="Auto-populate Workers on Location based on Territory",
         related="company_id.auto_populate_persons_on_location",
@@ -92,16 +102,6 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.search_on_complete_name",
         readonly=False,
     )
-    child_equipment = fields.Boolean(
-        string="Equipment can't have children",
-        related="company_id.child_equipment",
-        readonly=False,
-    )
-    no_territory_management = fields.Boolean(
-        string="Users do not manage territory",
-        related="company_id.no_territory_management",
-        readonly=False,
-    )
 
 
     # Dependencies
@@ -109,6 +109,8 @@ class ResConfigSettings(models.TransientModel):
     def _onchange_group_fsm_equipment(self):
         if not self.group_fsm_equipment:
             self.auto_populate_equipments_on_order = False
+        else:
+            self.group_fsm_children_equipment = True
 
     @api.onchange("module_fieldservice_repair")
     def _onchange_module_fieldservice_repair(self):

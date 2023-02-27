@@ -7,15 +7,6 @@ from odoo import fields, models
 class ResCompany(models.Model):
     _inherit = "res.company"
 
-    stage_management = fields.Boolean(
-        string="Allow stage management", store=True, default=True
-    )
-    child_equipment = fields.Boolean(
-        string="Equipment can have children", store=True, default=True
-    )
-    no_territory_management = fields.Boolean(
-        string="Users do not manage territory", store=True
-    )
     auto_populate_persons_on_location = fields.Boolean(
         string="Auto-populate Workers on Location based on Territory"
     )

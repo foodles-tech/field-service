@@ -12,7 +12,7 @@ from . import fsm_stage
 class FSMOrder(models.Model):
     _name = "fsm.order"
     _description = "Field Service Order"
-    _inherit = ["mail.thread", "mail.activity.mixin", "fsm.visibility.mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     def _default_stage_id(self):
         stage_ids = self.env["fsm.stage"].search(

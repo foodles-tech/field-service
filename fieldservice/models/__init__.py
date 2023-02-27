@@ -3,7 +3,6 @@
 from . import (
     res_company,
     res_config_settings,
-    fsm_visibility_mixin,
     fsm_category,
     fsm_template,
     res_territory,

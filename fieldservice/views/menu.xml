@@ -138,6 +138,7 @@
         action="action_fsm_stage"
         parent="config"
         sequence="20"
+        groups="fieldservice.group_fsm_manage_stage"
     />
     <!-- Config / Orders -->
     <menuitem id="menu_fsm_config_order" name="Orders" parent="config" sequence="30" />
@@ -187,4 +188,12 @@
         sequence="70"
         groups="group_fsm_category"
     />
+    <menuitem
+        id="base_territory.menu_res_territory"
+        groups="fieldservice.group_fsm_manage_territory"
+        name="Territories"
+        action="base_territory.action_res_territory"
+        parent="base.menu_users"
+        sequence="20"
+        />
 </odoo>
