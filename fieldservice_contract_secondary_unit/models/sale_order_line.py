@@ -20,14 +20,6 @@ class SaleOrderLine(models.Model):
         res["secondary_uom_qty"] = self.secondary_uom_qty
         return res
 
-    def _field_create_fsm_order_prepare_values(self):
-        self.ensure_one()
-        vals = super()._field_create_fsm_order_prepare_values()
-        duration = self.scheduled_duration
-        if duration:
-            vals["scheduled_duration"] = duration
-        return vals
-
     def _field_create_fsm_recurring_prepare_values(self):
         self.ensure_one()
         vals = super()._field_create_fsm_recurring_prepare_values()
