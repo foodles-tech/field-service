@@ -1,0 +1,11 @@
+<odoo>
+    <record id="foodles_noworker_fsm_location_form_view" model="ir.ui.view">
+        <field name="name">foodles.noworker.fsm.location.form</field>
+        <field name="model">fsm.location</field>
+        <field name="inherit_id" ref="fieldservice.fsm_location_form_view"/>
+        <field name="arch" type="xml">
+            <page name="preferred_workers" position="replace">
+            </page>
+        </field>
+    </record>
+</odoo>
