@@ -187,7 +187,7 @@
                                 </group>
                             </group>
                         </page>
-                        <page string="Preferred Workers">
+                        <page string="Preferred Workers" name="preferred_workers">
                             <field name="person_ids" nolabel="1">
                                 <tree editable="bottom">
                                     <field name="sequence" widget="handle" />
