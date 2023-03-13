@@ -52,11 +52,22 @@
             </filter>
         </field>
     </record>
+    <record id="contract_line_tree_view" model="ir.ui.view">
+        <field name="name"> contract.line.tree.view</field>
+        <field name="model">contract.line</field>
+        <field name="inherit_id" ref="contract.contract_line_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+               <field name="fsm_location_id" optional="true"/>
+               <field name="contract_user_id" optional="true"/>
+            </field>
+        </field>
+    </record>
     <record id="action_location_contract_lines" model="ir.actions.act_window">
         <field name="name">Contract Lines</field>
         <field name="res_model">contract.line</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="fieldservice_contract.contract_line_search_view_responsible_location" />
-        <field name="view_id" ref="contract.contract_line_report_tree_view" />
+        <field name="view_id" ref="fieldservice_contract.contract_line_tree_view" />
     </record>
 </odoo>
