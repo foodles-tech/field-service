@@ -1,5 +1,6 @@
 # Copyright (C) 2018 - TODAY, Open Source Integrators
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from datetime import datetime, timedelta
 
 from odoo import fields, models
 
@@ -11,35 +12,48 @@ class ResPartner(models.Model):
         string="Contract lines count", compute="_compute_contract_line_count"
     )
 
-    def _get_contract_line_count(self, loc):
-        child_loc_list = self.env["fsm.location"].search(
-            [("fsm_parent_id", "=", loc.id)]
+    def _get_contract_line_count(self, partner):
+        child_partner_list = self.env["res.partner"].search(
+            [("parent_id", "=", partner.id)]
         )
         orders = self.env["contract.line"].search_count(
-            [("contract_id.partner_id", "=", loc.id)]
+            [
+                "&",
+                ("contract_id.partner_id", "=", partner.id),
+                "&",
+                ("active", "=", True),
+                (
+                    "date_start",
+                    "<=",
+                    (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
+                ),
+                "|",
+                ("date_end", ">=", datetime.now().strftime("%Y-%m-%d")),
+                ("date_end", "=", False),
+            ]
         )
 
-        if child_loc_list:
-            for child_loc in child_loc_list:
-                orders += self._get_contract_line_count(child_loc)
+        if child_partner_list:
+            for child_partner in child_partner_list:
+                orders += self._get_contract_line_count(child_partner)
 
         return orders
 
     def _compute_contract_line_count(self):
-        for loc in self:
-            loc.contract_line_count = self._get_contract_line_count(loc)
+        for partner in self:
+            partner.contract_line_count = self._get_contract_line_count(partner)
 
-    def _get_contract_lines(self, loc):
-        child_loc_list = self.env["fsm.location"].search(
-            [("fsm_parent_id", "=", loc.id)]
+    def _get_contract_lines(self, partner):
+        child_partner_list = self.env["res.partner"].search(
+            [("parent_id", "=", partner.id)]
         )
         orders = self.env["contract.line"].search(
-            [("contract_id.partner_id", "=", loc.id)]
+            [("contract_id.partner_id", "=", partner.id)]
         )
 
-        if child_loc_list:
-            for child_loc in child_loc_list:
-                orders += self._get_contract_lines(child_loc)
+        if child_partner_list:
+            for child_partner in child_partner_list:
+                orders += self._get_contract_lines(child_partner)
 
         return orders
 
@@ -50,20 +64,22 @@ class ResPartner(models.Model):
         either be a in a list or in a form view, if there is only one
         contact to show.
         """
-        for location in self:
+        for partner in self:
             action = self.env["ir.actions.act_window"]._for_xml_id(
-                "fieldservice_contract.action_location_contract_lines"
+                "fieldservice_contract.action_contextual_contract_lines"
             )
-            contract_list = self._get_contract_lines(location)
+            contract_list = self._get_contract_lines(partner)
             action["context"] = self.env.context.copy()
             action["context"].update({"group_by": ""})
-            action["context"].update({"search_default_active": True})
+            action["context"].update({"search_default_in_progress": True})
             if len(contract_list) == 0 or len(contract_list) > 1:
                 action["domain"] = [("id", "in", contract_list.ids)]
             elif contract_list:
                 action["views"] = [
                     (
-                        self.env.ref("fieldservice_contract." + "contract_line_form_view").id,
+                        self.env.ref(
+                            "fieldservice_contract." + "contract_line_form_view"
+                        ).id,
                         "form",
                     )
                 ]

@@ -1,5 +1,6 @@
 # Copyright (C) 2018 - TODAY, Open Source Integrators
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from datetime import datetime, timedelta
 
 from odoo import _, fields, models
 
@@ -15,7 +16,22 @@ class FSMLocation(models.Model):
         child_loc_list = self.env["fsm.location"].search(
             [("fsm_parent_id", "=", loc.id)]
         )
-        orders = self.env["contract.line"].search_count([("fsm_location_id", "=", loc.id)])
+        orders = self.env["contract.line"].search_count(
+            [
+                "&",
+                ("fsm_location_id", "=", loc.id),
+                "&",
+                ("active", "=", True),
+                (
+                    "date_start",
+                    "<=",
+                    (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d"),
+                ),
+                "|",
+                ("date_end", ">=", datetime.now().strftime("%Y-%m-%d")),
+                ("date_end", "=", False),
+            ]
+        )
 
         if child_loc_list:
             for child_loc in child_loc_list:
@@ -48,12 +64,12 @@ class FSMLocation(models.Model):
         """
         for location in self:
             action = self.env["ir.actions.act_window"]._for_xml_id(
-                "fieldservice_contract.action_location_contract_lines"
+                "fieldservice_contract.action_contextual_contract_lines"
             )
             contract_list = self._get_contract_lines(location)
             action["context"] = self.env.context.copy()
             action["context"].update({"group_by": ""})
-            action["context"].update({"search_default_active": True})
+            action["context"].update({"search_default_in_progress": True})
             if len(contract_list) == 0 or len(contract_list) > 1:
                 action["domain"] = [("id", "in", contract_list.ids)]
             elif contract_list:

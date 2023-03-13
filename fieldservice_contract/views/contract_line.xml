@@ -49,6 +49,11 @@
             </field>
             <filter name="is_auto_renew" position="after">
                 <filter name="active" domain="[('active', '=', True)]" />
+                <filter
+                    name="in_progress"
+                    string="In progress"
+                    domain="['&amp;', ('active', '=', True), '&amp;', ('date_start', '&lt;=', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')), '|', ('date_end', '&gt;=', context_today().strftime('%Y-%m-%d')), ('date_end', '=', False)]"
+                />
             </filter>
         </field>
     </record>
@@ -63,7 +68,7 @@
             </field>
         </field>
     </record>
-    <record id="action_location_contract_lines" model="ir.actions.act_window">
+    <record id="action_contextual_contract_lines" model="ir.actions.act_window">
         <field name="name">Contract Lines</field>
         <field name="res_model">contract.line</field>
         <field name="view_mode">tree,form</field>
