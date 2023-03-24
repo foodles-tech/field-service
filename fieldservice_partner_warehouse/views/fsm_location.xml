@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="fsm_location_form_view" model="ir.ui.view">
+        <field name="name">fsm.location.form</field>
+        <field name="model">fsm.location</field>
+        <field name="inherit_id" ref="fieldservice.fsm_location_form_view" />
+        <field name="arch" type="xml">
+             <group id="main-right" position="inside">
+                <field
+                    name='default_resupply_warehouse_id'
+                    options="{'no_create': True}"
+                />
+            </group>
+        </field>
+    </record>
+
+    <record id="fsm_location_tree_view" model="ir.ui.view">
+        <field name="name">fsm.location.tree</field>
+        <field name="model">fsm.location</field>
+        <field name="inherit_id" ref="fieldservice.fsm_location_tree_view" />
+        <field name="arch" type="xml">
+            <tree position="inside">
+                <field
+                    name='default_resupply_warehouse_id'
+                    optional="hide"
+                    options="{'no_create': True}"
+                />
+            </tree>
+        </field>
+    </record>
+
+</odoo>
