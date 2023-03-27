@@ -31,18 +31,21 @@
                         string="Branch"
                         domain=""
                         context="{'group_by':'branch_id'}"
+                        groups="fieldservice.group_fsm_manage_territory"
                     />
                     <filter
                         name="district_id"
                         string="District"
                         domain=""
                         context="{'group_by':'district_id'}"
+                        groups="fieldservice.group_fsm_manage_territory"
                     />
                     <filter
                         name="region_id"
                         string="Region"
                         domain=""
                         context="{'group_by':'region_id'}"
+                        groups="fieldservice.group_fsm_manage_territory"
                     />
                 </group>
             </search>
@@ -115,10 +118,10 @@
                         <page string="Notes">
                             <field name="notes" nolabel="1" />
                         </page>
-                        <page string="Location">
+                        <page string="Location" groups="fieldservice.group_fsm_manage_territory">
                             <group>
                                 <group>
-                                    <field name="territory_id" groups="fieldservice.group_fsm_manage_territory"/>
+                                    <field name="territory_id"/>
                                     <field name="branch_id" />
                                     <field name="district_id" />
                                     <field name="region_id" />
