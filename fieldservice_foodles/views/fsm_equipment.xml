@@ -1,0 +1,49 @@
+<odoo>
+    <!-- Field Service Equipment -->
+    <record id="foodles_fsm_equipment_search_view" model="ir.ui.view">
+        <field name="name">foodles.fsm.equipment.search</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='person_id']" position="replace">
+            </xpath>
+        </field>
+    </record>
+    <record id="foodles_fsm_equipment_tree_view" model="ir.ui.view">
+        <field name="name">foodles.fsm.equipment.tree</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='person_id']" position="replace">
+            </xpath>
+        </field>
+    </record>
+    <record id="foodles_fsm_equipment_form_view" model="ir.ui.view">
+        <field name="name">foodles.fsm.equipment.form</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//field[@name='person_id']" position="replace">
+            </xpath>
+            <xpath expr="//sheet//field[@name='managed_by_id']" position="replace">
+            </xpath>
+            <xpath expr="//notebook//field[@name='person_id']" position="replace">
+            </xpath>
+        </field>
+    </record>
+    <!-- Field Service Equipment Dashboard -->
+    <record id="foodles_fsm_equipment_kanban_view" model="ir.ui.view">
+        <field name="name">foodles.fsm.equipment.kanban</field>
+        <field name="model">fsm.equipment</field>
+        <field name="inherit_id" ref="fieldservice.fsm_equipment_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban/field[@name='person_id']" position="attributes">
+                <attributes default_group_by="location_id" />
+            </xpath>
+            <xpath expr="//kanban/field[@name='person_id']" position="replace">
+            </xpath>
+            <xpath expr="//kanban//templates//field[@name='person_id']" position="replace">
+            </xpath>
+        </field>
+    </record>
+</odoo>
