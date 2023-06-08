@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="fsm_frequency_set_form_view_inherit_sale" model="ir.ui.view">
+        <field name="model">fsm.frequency.set</field>
+        <field
+            name="inherit_id"
+            ref="fieldservice_recurring.fsm_frequency_set_form_view"
+        />
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <field name="is_abstract" />
+            </field>
+            <field name="fsm_frequency_ids" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="fsm_frequency_ids" position="after">
+                <field
+                    name="fsm_abstract_frequency_ids"
+                    context="{'default_is_abstract': True}"
+                    attrs="{ 'invisible': [('is_abstract', '=', False)]}"
+                />
+                <field
+                    name="fsm_concrete_frequency_ids"
+                    context="{'default_is_abstract': False}"
+                    attrs="{ 'invisible': [('is_abstract', '=', True)]}"
+                />
+            </field>
+        </field>
+    </record>
+</odoo>
